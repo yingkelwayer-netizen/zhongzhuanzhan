@@ -1,54 +1,37 @@
 {
-  "site_title": "Naimi奶咪 - 个人中转站",
-  "seo_description": "Naimi奶咪的个人专属导航页，获取最新平台链接。",
-  "seo_keywords": "Naimi奶咪, Onlyfans, Fansly, Telegram, 周边",
+  "site_title": "您的专属名称 - 个人主页",
+  "seo_description": "这是您的专属导航页。",
+  "seo_keywords": "个人主页, 导航页",
   "profile": {
-    "name": "Naimi奶咪",
+    "name": "您的专属名称",
     "bg_image": "./assets/bg.jpg"
   },
   "categories": [
     {
-      "title": "Be my Vip",
+      "title": "您的分类标题一",
       "links": [
         {
-          "name": "⭐ Onlyfans ⭐",
-          "url": "https://onlyfans.com/",
+          "name": "社交平台链接一",
+          "url": "#",
           "icon_type": "of",
           "right_icon": "share"
         },
         {
-          "name": "Fansly (same as Onlyfans)",
-          "url": "https://fansly.com/",
+          "name": "社交平台链接二",
+          "url": "#",
           "icon_type": "fansly",
           "right_icon": "lock"
         }
       ]
     },
     {
-      "title": "中文平台(和Onlyfans同步)",
+      "title": "您的分类标题二",
       "links": [
         {
-          "name": "Telegram (微信/支付宝/虚拟币 ✅)",
-          "url": "https://t.me/",
+          "name": "通讯工具链接一",
+          "url": "#",
           "icon_type": "telegram",
           "right_icon": "more"
-        },
-        {
-          "name": "Iyaofans (微信/支付宝/信用卡 ✅)",
-          "url": "https://iyaofans.com/",
-          "icon_type": "iyaofans",
-          "right_icon": "lock"
-        }
-      ]
-    },
-    {
-      "title": "Merch · 周边",
-      "links": [
-        {
-          "name": "飞机杯/真人娃娃/Fleshlight/SexDoll",
-          "url": "#",
-          "icon_type": "merch",
-          "right_icon": "lock"
         }
       ]
     }
@@ -56,31 +39,19 @@
   "socials": [
     {
       "platform": "x",
-      "url": "https://x.com/"
-    },
-    {
-      "platform": "tiktok",
-      "url": "https://tiktok.com/"
+      "url": "#"
     },
     {
       "platform": "instagram",
-      "url": "https://instagram.com/"
-    },
-    {
-      "platform": "youtube",
-      "url": "https://youtube.com/"
+      "url": "#"
     }
   ],
   "bottom_button": {
-    "text": "在Linktree上加入anaimiya_vip",
-    "url": "https://linktr.ee/"
+    "text": "加入您的专属社群",
+    "url": "#"
   },
   "footer": [
-    { "name": "Cookie Preferences", "url": "#" },
-    { "name": "Report", "url": "#" },
-    { "name": "Privacy", "url": "#" },
-    { "name": "Explore", "url": "#" },
-    { "name": "About this account", "url": "#" },
-    { "name": "More from Linktree", "url": "#" }
+    { "name": "关于我", "url": "#" },
+    { "name": "隐私权政策", "url": "#" }
   ]
 }
