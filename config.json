@@ -1,0 +1,86 @@
+{
+  "site_title": "Naimi奶咪 - 个人中转站",
+  "seo_description": "Naimi奶咪的个人专属导航页，获取最新平台链接。",
+  "seo_keywords": "Naimi奶咪, Onlyfans, Fansly, Telegram, 周边",
+  "profile": {
+    "name": "Naimi奶咪",
+    "bg_image": "./assets/bg.jpg"
+  },
+  "categories": [
+    {
+      "title": "Be my Vip",
+      "links": [
+        {
+          "name": "⭐ Onlyfans ⭐",
+          "url": "https://onlyfans.com/",
+          "icon_type": "of",
+          "right_icon": "share"
+        },
+        {
+          "name": "Fansly (same as Onlyfans)",
+          "url": "https://fansly.com/",
+          "icon_type": "fansly",
+          "right_icon": "lock"
+        }
+      ]
+    },
+    {
+      "title": "中文平台(和Onlyfans同步)",
+      "links": [
+        {
+          "name": "Telegram (微信/支付宝/虚拟币 ✅)",
+          "url": "https://t.me/",
+          "icon_type": "telegram",
+          "right_icon": "more"
+        },
+        {
+          "name": "Iyaofans (微信/支付宝/信用卡 ✅)",
+          "url": "https://iyaofans.com/",
+          "icon_type": "iyaofans",
+          "right_icon": "lock"
+        }
+      ]
+    },
+    {
+      "title": "Merch · 周边",
+      "links": [
+        {
+          "name": "飞机杯/真人娃娃/Fleshlight/SexDoll",
+          "url": "#",
+          "icon_type": "merch",
+          "right_icon": "lock"
+        }
+      ]
+    }
+  ],
+  "socials": [
+    {
+      "platform": "x",
+      "url": "https://x.com/"
+    },
+    {
+      "platform": "tiktok",
+      "url": "https://tiktok.com/"
+    },
+    {
+      "platform": "instagram",
+      "url": "https://instagram.com/"
+    },
+    {
+      "platform": "youtube",
+      "url": "https://youtube.com/"
+    }
+  ],
+  "bottom_button": {
+    "text": "在Linktree上加入anaimiya_vip",
+    "url": "https://linktr.ee/"
+  },
+  "footer": [
+    { "name": "Cookie Preferences", "url": "#" },
+    { "name": "Report", "url": "#" },
+    { "name": "Privacy", "url": "#" },
+    { "name": "Explore", "url": "#" },
+    { "name": "About this account", "url": "#" },
+    { "name": "More from Linktree", "url": "#" }
+  ]
+}

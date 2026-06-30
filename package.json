@@ -1,0 +1,13 @@
+{
+  "name": "personal-portal",
+  "version": "1.0.0",
+  "description": "A static personal portal website generated from JSON",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node build.js && npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
