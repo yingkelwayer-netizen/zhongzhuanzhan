@@ -39,14 +39,14 @@
       "title": "最新内容",
       "links": [
        {
-          "name": "⭐咨询网站⭐",
-          "url": "http://www.ineedsomehelp.cn:3000",
+          "name": "世界杯赌球完全指南⚽",
+          "url": "https://mp.weixin.qq.com/s/MfZBPgb_mRFNE63L9B90cA",
           "icon_type": "of",
           "right_icon": "share"
         },
         {
-          "name": "民间借贷计算器",
-          "url": "http://www.ineedsomehelp.cn:8081",
+          "name": "Qclaw:我做了个skill",
+          "url": "https://mp.weixin.qq.com/s/X4SzpT0rClvtnDg8J2rthA",
           "icon_type": "fansly",
           "right_icon": "lock"
         }
@@ -56,7 +56,7 @@
   "socials": [
     {
       "platform": "zhihu",
-      "url": "#"
+      "url": "https://www.zhihu.com/people/adminxiao-niu"
     },
     {
       "platform": "xiaohongshu",
