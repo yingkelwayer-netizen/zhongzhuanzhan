@@ -55,20 +55,16 @@
   ],
   "socials": [
     {
-      "platform": "x",
+      "platform": "zhihu",
       "url": "#"
     },
     {
-      "platform": "instagram",
+      "platform": "xiaohongshu",
       "url": "#"
     }
   ],
-  "bottom_button": {
-    "text": "加入您的专属社群",
-    "url": "#"
-  },
   "footer": [
     { "name": "关于我", "url": "#" },
-    { "name": "隐私权政策", "url": "#" }
+    { "name": "隐私权政策", "url": "./privacy.html" }
   ]
 }
