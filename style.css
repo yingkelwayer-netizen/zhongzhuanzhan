@@ -33,8 +33,10 @@ body {
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-  position: relative;
+  position: fixed;
+  top: 0;
   z-index: 1;
+  will-change: opacity;
 }
 
 /* 渐变遮罩 (自然过渡到背景色) */
@@ -55,7 +57,7 @@ body {
   padding: 0 16px 40px;
   position: relative;
   z-index: 2;
-  margin-top: -60px; /* 让名字叠在渐变上 */
+  margin-top: calc(60vh - 60px); /* 留出名字重叠的空间 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,6 +117,17 @@ body {
   min-height: 68px;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   overflow: hidden;
+}
+
+@keyframes jump-twice {
+  0%, 80% { transform: translateY(0); }
+  85% { transform: translateY(-8px); }
+  90% { transform: translateY(0); }
+  95% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+.jump-anim {
+  animation: jump-twice 4s infinite ease-in-out;
 }
 
 .link-btn:hover {

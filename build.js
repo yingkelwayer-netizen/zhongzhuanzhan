@@ -21,12 +21,14 @@ const icons = {
 };
 
 const renderLinks = (categories) => {
-  return categories.map(cat => `
+  return categories.map((cat, catIndex) => `
     <div class="category-section">
       <h3 class="category-title">${cat.title}</h3>
       <div class="links-container">
-        ${cat.links.map(link => `
-          <a href="${link.url}" class="link-btn" target="_blank" rel="noopener noreferrer">
+        ${cat.links.map((link, linkIndex) => {
+          const extraClass = (catIndex === 0 && linkIndex === 0) ? ' jump-anim' : '';
+          return `
+          <a href="${link.url}" class="link-btn${extraClass}" target="_blank" rel="noopener noreferrer">
             <div class="btn-left-icon">
               ${icons[link.icon_type] || ''}
             </div>
@@ -35,7 +37,8 @@ const renderLinks = (categories) => {
               ${icons[link.right_icon] || ''}
             </div>
           </a>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     </div>
   `).join('');
@@ -105,15 +108,24 @@ const htmlTemplate = `<!DOCTYPE html>
         ${renderFooter(config.footer)}
     </footer>
 
-    <!-- 如果用户没有提供背景图，则注入默认样式提示 -->
+    <!-- 动态效果和默认处理 -->
     <script>
+      // 1. 默认黑色背景处理
       const hero = document.querySelector('.hero-bg');
       const bgImage = window.getComputedStyle(hero).backgroundImage;
       if (bgImage.includes('bg.jpg')) {
-          // 提供一个优雅的默认纯黑背景
           hero.style.backgroundColor = '#111';
           hero.style.backgroundImage = 'none';
       }
+
+      // 2. 页面上滑时的背景渐隐和视差效果 (高级感)
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        const maxScroll = window.innerHeight * 0.5; // 滑动半个屏幕时完全透明
+        let opacity = 1 - (scrollY / maxScroll);
+        if (opacity < 0) opacity = 0;
+        hero.style.opacity = opacity;
+      });
     </script>
 </body>
 </html>`;

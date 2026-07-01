@@ -1,37 +1,54 @@
 {
-  "site_title": "您的专属名称 - 个人主页",
-  "seo_description": "这是您的专属导航页。",
-  "seo_keywords": "个人主页, 导航页",
+  "site_title": "🦁牛宗汇律师|导航页",
+  "seo_description": "牛宗汇律师|盈科律师事务所牛律师的导航页",
+  "seo_keywords": "牛宗汇律师|导航页",
   "profile": {
-    "name": "您的专属名称",
-    "bg_image": "./assets/bg.jpg"
+    "name": "牛律师Atty.🦁",
+    "bg_image": "./assets/NIUZONGHUI.jpg"
   },
   "categories": [
     {
-      "title": "您的分类标题一",
+      "title": "成为我的客户",
       "links": [
         {
-          "name": "社交平台链接一",
-          "url": "#",
+          "name": "⭐咨询网站⭐",
+          "url": "http://www.ineedsomehelp.cn:3000",
           "icon_type": "of",
           "right_icon": "share"
         },
         {
-          "name": "社交平台链接二",
-          "url": "#",
+          "name": "民间借贷计算器",
+          "url": "http://www.ineedsomehelp.cn:8081",
           "icon_type": "fansly",
           "right_icon": "lock"
         }
       ]
     },
     {
-      "title": "您的分类标题二",
+      "title": "诉讼仲裁教程",
       "links": [
         {
-          "name": "通讯工具链接一",
+          "name": "教程网站⚠搭建中⚠",
           "url": "#",
           "icon_type": "telegram",
           "right_icon": "more"
+        }
+      ]
+    },
+    {
+      "title": "最新内容",
+      "links": [
+       {
+          "name": "⭐咨询网站⭐",
+          "url": "http://www.ineedsomehelp.cn:3000",
+          "icon_type": "of",
+          "right_icon": "share"
+        },
+        {
+          "name": "民间借贷计算器",
+          "url": "http://www.ineedsomehelp.cn:8081",
+          "icon_type": "fansly",
+          "right_icon": "lock"
         }
       ]
     }
