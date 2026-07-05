@@ -77,7 +77,7 @@ const htmlTemplate = `<!DOCTYPE html>
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?ba32f5b00d73ed35c3b25f06f0414d35";
+  hm.src = "https://hm.baidu.com/hm.js?8eb577c510b456eeeb898fe295fc5013";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
