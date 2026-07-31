@@ -1,9 +1,9 @@
 {
-  "site_title": "🦁导航页",
-  "seo_description": "导航页",
-  "seo_keywords": "导航页",
+  "site_title": "🦁牛宗汇律师|导航页",
+  "seo_description": "牛宗汇律师|盈科律师事务所牛律师的导航页",
+  "seo_keywords": "牛宗汇律师|导航页",
   "profile": {
-    "name": "导航页🦁",
+    "name": "牛律师Atty.🦁",
     "bg_image": "./assets/NIUZONGHUI.jpg"
   },
   "categories": [
@@ -11,24 +11,24 @@
       "title": "成为我的客户",
       "links": [
         {
-          "name": "⭐门户网站⭐",
-          "url": "#",
+          "name": "⭐咨询网站⭐",
+          "url": "http://www.ineedsomehelp.cn:3000",
           "icon_type": "of",
           "right_icon": "share"
         },
         {
-          "name": "计算器网站",
-          "url": "#",
+          "name": "民间借贷计算器",
+          "url": "http://www.ineedsomehelp.cn:8081",
           "icon_type": "fansly",
           "right_icon": "lock"
         }
       ]
     },
     {
-      "title": "占位符",
+      "title": "诉讼仲裁教程",
       "links": [
         {
-          "name": "占位符",
+          "name": "教程网站⚠搭建中⚠",
           "url": "#",
           "icon_type": "telegram",
           "right_icon": "more"
@@ -39,14 +39,14 @@
       "title": "最新内容",
       "links": [
        {
-          "name": "占位符",
-          "url": "#",
+          "name": "世界杯赌球完全指南⚽",
+          "url": "https://mp.weixin.qq.com/s/MfZBPgb_mRFNE63L9B90cA",
           "icon_type": "of",
           "right_icon": "share"
         },
         {
-          "name": "占位符",
-          "url": "#",
+          "name": "Qclaw:我做了个skill",
+          "url": "https://mp.weixin.qq.com/s/X4SzpT0rClvtnDg8J2rthA",
           "icon_type": "fansly",
           "right_icon": "lock"
         }
@@ -56,7 +56,7 @@
   "socials": [
     {
       "platform": "zhihu",
-      "url": "#"
+      "url": "https://www.zhihu.com/people/adminxiao-niu"
     },
     {
       "platform": "xiaohongshu",
@@ -64,7 +64,7 @@
     }
   ],
   "footer": [
-    { "name": "关于我们", "url": "#" },
-    { "name": "隐私权政策", "url": "#" }
+    { "name": "关于我", "url": "#" },
+    { "name": "隐私权政策", "url": "./privacy.html" }
   ]
 }

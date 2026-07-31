@@ -11,23 +11,84 @@ jobs:
 
     steps:
     - name: 检出代码 (Checkout)
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7.0.1
 
     - name: 设置 Node.js 环境
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v7.0.0
       with:
-        node-version: '18'
+        node-version: '24'
 
     - name: 编译生成静态网页
       run: |
         node build.js
 
     - name: 部署到阿里云 ECS
-      uses: appleboy/scp-action@master
+      uses: appleboy/scp-action@v1.0.0
       with:
         host: ${{ secrets.SERVER_IP }}
         username: root
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
-        source: "index.html,style.css,assets/"
+        source: "index.html,privacy.html,style.css,assets/"
         target: "/www/wwwroot/zhongzhuanzhan"
+
+    - name: 配置 HTTP 域名并重载 Nginx
+      uses: appleboy/ssh-action@v1.2.5
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: root
+        password: ${{ secrets.SERVER_PASSWORD }}
+        port: 22
+        script: |
+          set -eu
+
+          site_conf="/www/server/panel/vhost/nginx/zonghuin.com.conf"
+          backup_conf=""
+          nginx_bin="/www/server/nginx/sbin/nginx"
+
+          if [ ! -x "$nginx_bin" ]; then
+            nginx_bin="nginx"
+          fi
+
+          if [ -f "$site_conf" ]; then
+            backup_conf="$(mktemp /tmp/zonghuin-nginx.XXXXXX.conf)"
+            cp "$site_conf" "$backup_conf"
+          fi
+
+          cat > "$site_conf" <<'NGINX_CONF'
+          server {
+              listen 80;
+              listen [::]:80;
+              server_name zonghuin.com www.zonghuin.com;
+
+              root /www/wwwroot/zhongzhuanzhan;
+              index index.html;
+
+              access_log /www/wwwlogs/zonghuin.com.log;
+              error_log /www/wwwlogs/zonghuin.com.error.log;
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+
+              location ~ /\. {
+                  deny all;
+              }
+          }
+          NGINX_CONF
+
+          if "$nginx_bin" -t && "$nginx_bin" -s reload; then
+            if [ -n "$backup_conf" ]; then
+              rm -f "$backup_conf"
+            fi
+          else
+            if [ -n "$backup_conf" ]; then
+              cp "$backup_conf" "$site_conf"
+              rm -f "$backup_conf"
+            else
+              rm -f "$site_conf"
+            fi
+            "$nginx_bin" -t
+            "$nginx_bin" -s reload || true
+            exit 1
+          fi
