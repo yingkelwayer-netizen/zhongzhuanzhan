@@ -1,11 +1,15 @@
 :root {
   --bg-color: #121212;
-  --btn-bg: #222222;
-  --btn-hover-bg: #2a2a2a;
-  --primary-gold: #F2D06B;
-  --text-white: #FFFFFF;
+  --btn-bg: rgba(35, 35, 36, 0.92);
+  --btn-hover-bg: #2c2c2e;
+  --primary-gold: #f2d06b;
+  --text-white: #ffffff;
   --text-dark: #000000;
   --max-width: 680px;
+  --hero-height: clamp(500px, 62vh, 650px);
+  --halo-primary: 177, 137, 104;
+  --halo-secondary: 49, 68, 122;
+  --shell-radius: 34px;
 }
 
 * {
@@ -14,75 +18,152 @@
   padding: 0;
 }
 
+html {
+  background: #0b0c0f;
+}
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-white);
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 42px 16px;
+  overflow-x: hidden;
+  background: #0b0c0f;
+  color: var(--text-white);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* 头部主图背景 */
-.hero-bg {
-  width: 100%;
-  max-width: var(--max-width);
-  height: 60vh;
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
+/* 封面主色驱动的页面环境光 */
+.ambient-backdrop {
   position: fixed;
-  top: 0;
-  z-index: 1;
-  will-change: opacity;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(var(--halo-primary), 0.38) 0, rgba(var(--halo-primary), 0.13) 30%, transparent 58%),
+    radial-gradient(circle at 83% 58%, rgba(var(--halo-secondary), 0.3) 0, rgba(var(--halo-secondary), 0.1) 32%, transparent 62%),
+    linear-gradient(135deg, rgba(var(--halo-secondary), 0.12), rgba(11, 12, 15, 0.2) 46%, rgba(var(--halo-primary), 0.1));
+  filter: saturate(1.18);
 }
 
-/* 渐变遮罩 (自然过渡到背景色) */
-.gradient-overlay {
+.ambient-backdrop::after {
+  content: '';
   position: absolute;
-  bottom: 0;
+  inset: 0;
+  background: rgba(7, 8, 10, 0.34);
+  backdrop-filter: blur(64px);
+}
+
+/* 整页卡片：四角统一采用连续圆角 */
+.page-shell {
+  position: relative;
+  z-index: 1;
+  width: min(100%, var(--max-width));
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--shell-radius);
+  background: var(--bg-color);
+  box-shadow:
+    0 36px 100px rgba(0, 0, 0, 0.55),
+    0 0 100px rgba(var(--halo-primary), 0.11);
+  isolation: isolate;
+}
+
+/* 头部主图 */
+.hero-bg {
+  position: absolute;
+  z-index: 1;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 60%;
-  background: linear-gradient(to bottom, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.8) 50%, var(--bg-color) 100%);
+  height: var(--hero-height);
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.gradient-overlay {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(18, 18, 18, 0) 34%, rgba(18, 18, 18, 0.25) 52%, rgba(18, 18, 18, 0.92) 79%, var(--bg-color) 100%);
+}
+
+.share-button {
+  position: absolute;
+  z-index: 3;
+  top: 20px;
+  right: 20px;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.48);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.share-button:hover {
+  transform: translateY(-2px) scale(1.04);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(20, 20, 20, 0.68);
+}
+
+.share-button:active {
+  transform: scale(0.94);
+}
+
+.share-button:focus-visible {
+  outline: 3px solid rgba(242, 208, 107, 0.72);
+  outline-offset: 3px;
+}
+
+.share-button svg {
+  width: 22px;
+  height: 22px;
 }
 
 /* 主内容区 */
 .main-container {
-  width: 100%;
-  max-width: var(--max-width);
-  padding: 0 16px 40px;
   position: relative;
   z-index: 2;
-  margin-top: calc(60vh - 60px); /* 留出名字重叠的空间 */
   display: flex;
+  width: 100%;
+  margin-top: calc(var(--hero-height) - 96px);
+  padding: 0 22px 42px;
   flex-direction: column;
   align-items: center;
+  border-radius: 34px 34px 0 0;
+  background: linear-gradient(to bottom, rgba(18, 18, 18, 0.72), var(--bg-color) 118px);
 }
 
-/* 个人资料 */
 .profile-header {
-  text-align: center;
   margin-bottom: 32px;
+  text-align: center;
 }
 
 .profile-name {
-  font-size: 36px;
+  font-size: clamp(30px, 5vw, 38px);
   font-weight: 700;
   letter-spacing: 0.5px;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.58);
 }
 
-/* 链接列表区 */
 .links-section {
-  width: 100%;
   display: flex;
+  width: 100%;
+  margin-bottom: 48px;
   flex-direction: column;
   gap: 32px;
-  margin-bottom: 48px;
 }
 
 .category-section {
@@ -90,11 +171,11 @@ body {
 }
 
 .category-title {
+  margin-bottom: 16px;
   color: var(--primary-gold);
   font-size: 15px;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 16px;
 }
 
 .links-container {
@@ -103,20 +184,20 @@ body {
   gap: 16px;
 }
 
-/* 跳转按钮样式 */
 .link-btn {
   display: flex;
+  min-height: 68px;
+  padding: 8px 16px;
+  overflow: hidden;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--btn-bg);
-  border: 1px solid var(--primary-gold);
-  border-radius: 12px;
-  text-decoration: none;
+  border: 1px solid rgba(242, 208, 107, 0.72);
+  border-radius: 18px;
+  background: var(--btn-bg);
   color: var(--text-white);
-  padding: 8px 16px;
-  min-height: 68px;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  overflow: hidden;
 }
 
 @keyframes jump-twice {
@@ -126,57 +207,53 @@ body {
   95% { transform: translateY(-8px); }
   100% { transform: translateY(0); }
 }
+
 .jump-anim {
   animation: jump-twice 4s infinite ease-in-out;
 }
 
 .link-btn:hover {
-  transform: scale(1.02);
-  background-color: var(--btn-hover-bg);
-  box-shadow: 0 4px 20px rgba(242, 208, 107, 0.15);
+  transform: translateY(-2px);
+  background: var(--btn-hover-bg);
+  box-shadow: 0 8px 26px rgba(242, 208, 107, 0.14);
 }
 
-/* 按钮左侧图标 */
 .btn-left-icon {
+  display: flex;
   width: 48px;
   height: 48px;
   flex-shrink: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* 确保内部 SVG 充满容器，保留特定 logo 的圆角 */
 .btn-left-icon svg {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* 按钮文字 */
 .btn-text {
+  display: -webkit-box;
+  overflow: hidden;
+  padding: 0 16px;
   flex-grow: 1;
-  text-align: center;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   font-size: 15px;
   font-weight: 600;
-  padding: 0 16px;
-  /* 处理超长文字省略号 */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  text-align: center;
   text-overflow: ellipsis;
 }
 
-/* 按钮右侧图标 */
 .btn-right-icon {
+  display: flex;
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.5); /* 右侧图标通常是半透明灰色 */
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-right-icon svg {
@@ -184,21 +261,20 @@ body {
   height: 20px;
 }
 
-/* 社交媒体区域 */
 .socials-section {
   display: flex;
+  margin-bottom: 24px;
   justify-content: center;
   gap: 24px;
-  margin-bottom: 48px;
 }
 
 .social-icon {
-  color: var(--primary-gold);
-  width: 32px;
-  height: 32px;
   display: flex;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
+  color: var(--primary-gold);
   transition: transform 0.2s ease;
 }
 
@@ -211,26 +287,25 @@ body {
   height: 100%;
 }
 
-/* 底部胶囊按钮 */
 .bottom-action {
-  width: 100%;
   display: flex;
-  justify-content: center;
+  width: 100%;
   margin-bottom: 48px;
+  justify-content: center;
 }
 
 .pill-btn {
   display: inline-flex;
+  padding: 18px 36px;
   align-items: center;
   justify-content: center;
-  background-color: var(--text-white);
+  border-radius: 999px;
+  background: var(--text-white);
   color: var(--text-dark);
-  font-weight: 700;
-  font-size: 16px;
-  text-decoration: none;
-  padding: 18px 36px;
-  border-radius: 100px;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -239,44 +314,107 @@ body {
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
 }
 
-/* 页脚 */
 .site-footer {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  max-width: var(--max-width);
-  text-align: center;
-  padding: 0 16px 40px;
+  padding: 0 16px 36px;
+  background: var(--bg-color);
   color: var(--primary-gold);
   font-size: 13px;
   line-height: 2;
+  text-align: center;
 }
 
 .footer-link {
+  margin: 0 4px;
   color: inherit;
   text-decoration: none;
-  margin: 0 4px;
 }
 
 .footer-link:hover {
   text-decoration: underline;
 }
 
-/* 移动端细微调整 */
+.share-toast {
+  position: fixed;
+  z-index: 10;
+  bottom: 26px;
+  left: 50%;
+  padding: 11px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(30, 30, 32, 0.9);
+  color: #fff;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.32);
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  backdrop-filter: blur(16px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.share-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --hero-height: clamp(430px, 58vh, 560px);
+    --shell-radius: 26px;
+  }
+
+  body {
+    padding: 12px;
+  }
+
+  .main-container {
+    margin-top: calc(var(--hero-height) - 84px);
+    padding-right: 16px;
+    padding-left: 16px;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .share-button {
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
 @media (max-width: 480px) {
-  .hero-bg {
-    height: 55vh;
-  }
   .link-btn {
+    min-height: 64px;
     padding: 8px 12px;
+    border-radius: 16px;
   }
+
   .btn-left-icon {
     width: 44px;
     height: 44px;
   }
+
   .btn-text {
+    padding: 0 10px;
     font-size: 14px;
   }
+
   .pill-btn {
     width: 100%;
     padding: 16px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

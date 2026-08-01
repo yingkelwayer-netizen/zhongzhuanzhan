@@ -12,13 +12,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 头部背景图 -->
-    <div class="hero-bg" style="background-image: url('./assets/NIUZONGHUI.jpg');">
-        <div class="gradient-overlay"></div>
-    </div>
+    <!-- 根据封面主色生成的环境光晕 -->
+    <div class="ambient-backdrop" aria-hidden="true"></div>
 
-    <!-- 主容器 -->
-    <main class="main-container">
+    <div class="page-shell">
+      <!-- 头部背景图 -->
+      <div class="hero-bg" data-image-src="./assets/NIUZONGHUI.jpg" style="background-image: url('./assets/NIUZONGHUI.jpg');">
+          <div class="gradient-overlay"></div>
+          <button class="share-button" type="button" aria-label="分享此页面" title="分享此页面">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="right-icon"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
+      </div>
+
+      <!-- 主容器 -->
+      <main class="main-container">
         <!-- 个人资料 -->
         <header class="profile-header">
             <h1 class="profile-name">牛律师Atty.🦁</h1>
@@ -115,34 +122,139 @@
 
         <!-- 底部特色按钮 (如果有) -->
         
-    </main>
+      </main>
 
-    <!-- 底部版权和隐私链接 -->
-    <footer class="site-footer">
-        
-    <a href="#" class="footer-link">关于我</a> &middot; 
-  
-    <a href="./privacy.html" class="footer-link">隐私权政策</a>
-  
-    </footer>
+      <!-- 底部版权和隐私链接 -->
+      <footer class="site-footer">
+          <a href="#" class="footer-link">关于我</a> &middot;
+          <a href="./privacy.html" class="footer-link">隐私权政策</a>
+      </footer>
+    </div>
+
+    <div class="share-toast" role="status" aria-live="polite"></div>
 
     <!-- 动态效果和默认处理 -->
     <script>
-      // 1. 默认黑色背景处理
       const hero = document.querySelector('.hero-bg');
+      const shareButton = document.querySelector('.share-button');
+      const shareToast = document.querySelector('.share-toast');
       const bgImage = window.getComputedStyle(hero).backgroundImage;
+
       if (bgImage.includes('bg.jpg')) {
           hero.style.backgroundColor = '#111';
           hero.style.backgroundImage = 'none';
       }
 
-      // 2. 页面上滑时的背景渐隐和视差效果 (高级感)
-      window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        const maxScroll = window.innerHeight * 0.5; // 滑动半个屏幕时完全透明
-        let opacity = 1 - (scrollY / maxScroll);
-        if (opacity < 0) opacity = 0;
-        hero.style.opacity = opacity;
+      // 从封面图提取两个高饱和度主色，驱动页面外侧光晕。
+      function applyImageGlow(imageUrl) {
+        const image = new Image();
+        image.decoding = 'async';
+        image.onload = function () {
+          try {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d', { willReadFrequently: true });
+            const sampleWidth = 48;
+            const sampleHeight = 32;
+            canvas.width = sampleWidth;
+            canvas.height = sampleHeight;
+            context.drawImage(image, 0, 0, sampleWidth, sampleHeight);
+
+            const pixels = context.getImageData(0, 0, sampleWidth, sampleHeight).data;
+            const buckets = Array.from({ length: 24 }, function () {
+              return { weight: 0, r: 0, g: 0, b: 0 };
+            });
+
+            for (let i = 0; i < pixels.length; i += 4) {
+              const r = pixels[i];
+              const g = pixels[i + 1];
+              const b = pixels[i + 2];
+              const max = Math.max(r, g, b);
+              const min = Math.min(r, g, b);
+              const chroma = max - min;
+              const brightness = (r + g + b) / 3;
+
+              if (chroma < 16 || brightness < 24 || brightness > 246) continue;
+
+              let hue = 0;
+              if (max === r) hue = ((g - b) / chroma) % 6;
+              else if (max === g) hue = ((b - r) / chroma) + 2;
+              else hue = ((r - g) / chroma) + 4;
+              hue = (hue * 60 + 360) % 360;
+
+              const bucket = buckets[Math.floor(hue / 15)];
+              const weight = Math.pow(chroma / 255, 2) * (0.35 + brightness / 255);
+              bucket.weight += weight;
+              bucket.r += r * weight;
+              bucket.g += g * weight;
+              bucket.b += b * weight;
+            }
+
+            const colors = buckets
+              .filter(function (bucket) { return bucket.weight > 0; })
+              .sort(function (a, b) { return b.weight - a.weight; })
+              .slice(0, 2)
+              .map(function (bucket) {
+                return [
+                  Math.round(bucket.r / bucket.weight),
+                  Math.round(bucket.g / bucket.weight),
+                  Math.round(bucket.b / bucket.weight)
+                ].join(', ');
+              });
+
+            if (colors[0]) document.documentElement.style.setProperty('--halo-primary', colors[0]);
+            if (colors[1]) document.documentElement.style.setProperty('--halo-secondary', colors[1]);
+          } catch (error) {
+            // 跨域图片无法读取像素时保留 CSS 中的安全默认色。
+          }
+        };
+        image.src = imageUrl;
+      }
+
+      applyImageGlow(hero.dataset.imageSrc);
+
+      let toastTimer;
+      function showShareMessage(message) {
+        shareToast.textContent = message;
+        shareToast.classList.add('is-visible');
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(function () {
+          shareToast.classList.remove('is-visible');
+        }, 2200);
+      }
+
+      async function copyCurrentUrl() {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+        } catch (error) {
+          const input = document.createElement('textarea');
+          input.value = window.location.href;
+          input.setAttribute('readonly', '');
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          input.remove();
+        }
+        showShareMessage('链接已复制');
+      }
+
+      shareButton.addEventListener('click', async function () {
+        const shareData = {
+          title: document.title,
+          text: '牛宗汇律师|盈科律师事务所牛律师的导航页',
+          url: window.location.href
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (error) {
+            if (error.name !== 'AbortError') await copyCurrentUrl();
+          }
+        } else {
+          await copyCurrentUrl();
+        }
       });
     </script>
 </body>
