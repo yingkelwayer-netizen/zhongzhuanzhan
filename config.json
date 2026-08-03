@@ -12,13 +12,13 @@
       "links": [
         {
           "name": "⭐咨询网站⭐",
-          "url": "http://www.ineedsomehelp.cn:3000",
+          "url": "http://www.niuzonghui.com",
           "icon_type": "of",
           "right_icon": "share"
         },
         {
           "name": "民间借贷计算器",
-          "url": "http://www.ineedsomehelp.cn:8081",
+          "url": "http://www.ineedsomehelp.cn",
           "icon_type": "fansly",
           "right_icon": "lock"
         }
