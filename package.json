@@ -5,9 +5,10 @@
   "main": "build.js",
   "scripts": {
     "build": "node build.js",
-    "test": "npm run test:parallax && npm run test:deploy",
+    "test": "npm run test:parallax && npm run test:deploy && npm run test:https-repair",
     "test:parallax": "node tests/parallax-structure.test.js",
     "test:deploy": "node tests/deploy-workflow.test.js",
+    "test:https-repair": "node tests/https-repair-workflow.test.js",
     "watch:build": "nodemon --watch config.json --watch build.js --exec \"node build.js\"",
     "watch:serve": "live-server .",
     "dev": "concurrently \"npm run watch:build\" \"npm run watch:serve\""

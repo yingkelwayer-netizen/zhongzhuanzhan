@@ -1,0 +1,181 @@
+name: Repair zonghuin.com HTTPS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zonghuin-https-maintenance
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate certificate and enable HTTPS redirect
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          script: |
+            set -eu
+            umask 077
+
+            site_root="/www/wwwroot/zhongzhuanzhan"
+            site_conf="/www/server/panel/vhost/nginx/zonghuin.com.conf"
+            cert_file="/www/server/panel/vhost/cert/zonghuin.com/fullchain.pem"
+            key_file="/www/server/panel/vhost/cert/zonghuin.com/privkey.pem"
+            nginx_bin="/www/server/nginx/sbin/nginx"
+            backup_conf=""
+            had_previous_conf="false"
+            temp_conf="$(mktemp /tmp/zonghuin-nginx-new.XXXXXX.conf)"
+
+            cleanup() {
+              rm -f "$temp_conf"
+            }
+            trap cleanup EXIT
+
+            if [ ! -x "$nginx_bin" ]; then
+              nginx_bin="$(command -v nginx || true)"
+            fi
+
+            if [ -z "$nginx_bin" ] || [ ! -x "$nginx_bin" ]; then
+              echo "Nginx binary was not found"
+              exit 1
+            fi
+
+            for required_path in "$site_root" "$cert_file" "$key_file"; do
+              if [ ! -e "$required_path" ]; then
+                echo "Required path is missing: $required_path"
+                exit 1
+              fi
+            done
+
+            openssl x509 -in "$cert_file" -noout >/dev/null
+            openssl pkey -in "$key_file" -noout >/dev/null
+
+            if ! openssl x509 -in "$cert_file" -checkend 604800 -noout; then
+              echo "Certificate is expired or expires in less than seven days"
+              exit 1
+            fi
+
+            certificate_san="$(openssl x509 -in "$cert_file" -noout -ext subjectAltName 2>/dev/null | tr '\n' ' ')"
+            if ! printf '%s' "$certificate_san" | grep -Eq 'DNS:zonghuin\.com([,[:space:]]|$)'; then
+              echo "Certificate does not cover zonghuin.com"
+              exit 1
+            fi
+            if ! printf '%s' "$certificate_san" | grep -Eq 'DNS:www\.zonghuin\.com([,[:space:]]|$)|DNS:\*\.zonghuin\.com([,[:space:]]|$)'; then
+              echo "Certificate does not cover www.zonghuin.com"
+              exit 1
+            fi
+
+            cert_public_key="$(openssl x509 -in "$cert_file" -pubkey -noout | openssl pkey -pubin -outform DER 2>/dev/null | openssl dgst -sha256)"
+            key_public_key="$(openssl pkey -in "$key_file" -pubout 2>/dev/null | openssl pkey -pubin -outform DER 2>/dev/null | openssl dgst -sha256)"
+            if [ -z "$cert_public_key" ] || [ "$cert_public_key" != "$key_public_key" ]; then
+              echo "Certificate and private key do not match"
+              exit 1
+            fi
+
+            if [ -f "$site_conf" ]; then
+              backup_conf="${site_conf}.codex-backup-$(date -u +%Y%m%dT%H%M%SZ)"
+              cp -p "$site_conf" "$backup_conf"
+              had_previous_conf="true"
+              echo "Previous Nginx configuration backed up to $backup_conf"
+            fi
+
+            restore_previous_config() {
+              echo "Restoring previous Nginx configuration"
+              if [ "$had_previous_conf" = "true" ]; then
+                cp -p "$backup_conf" "$site_conf"
+              else
+                rm -f "$site_conf"
+              fi
+              "$nginx_bin" -t
+              "$nginx_bin" -s reload || true
+            }
+
+            cat > "$temp_conf" <<'NGINX_CONF'
+            server {
+                listen 80;
+                listen [::]:80;
+                server_name zonghuin.com www.zonghuin.com;
+
+                access_log /www/wwwlogs/zonghuin.com.log;
+                error_log /www/wwwlogs/zonghuin.com.error.log;
+
+                location ^~ /.well-known/acme-challenge/ {
+                    root /www/wwwroot/zhongzhuanzhan;
+                    try_files $uri =404;
+                }
+
+                location / {
+                    return 301 https://$host$request_uri;
+                }
+            }
+
+            server {
+                listen 443 ssl;
+                listen [::]:443 ssl;
+                server_name zonghuin.com www.zonghuin.com;
+
+                ssl_certificate /www/server/panel/vhost/cert/zonghuin.com/fullchain.pem;
+                ssl_certificate_key /www/server/panel/vhost/cert/zonghuin.com/privkey.pem;
+                ssl_protocols TLSv1.2 TLSv1.3;
+                ssl_session_cache shared:ZongHuiSSL:10m;
+                ssl_session_timeout 1d;
+                ssl_session_tickets off;
+
+                root /www/wwwroot/zhongzhuanzhan;
+                index index.html;
+
+                access_log /www/wwwlogs/zonghuin.com.log;
+                error_log /www/wwwlogs/zonghuin.com.error.log;
+
+                error_page 497 https://$host$request_uri;
+
+                location / {
+                    try_files $uri $uri/ =404;
+                }
+
+                location ^~ /.well-known/acme-challenge/ {
+                    try_files $uri =404;
+                }
+
+                location ~ /\. {
+                    deny all;
+                }
+            }
+            NGINX_CONF
+
+            install -m 0644 "$temp_conf" "$site_conf"
+
+            if ! "$nginx_bin" -t; then
+              restore_previous_config
+              exit 1
+            fi
+
+            if ! "$nginx_bin" -s reload; then
+              restore_previous_config
+              exit 1
+            fi
+
+            verify_runtime() {
+              http_headers="$(curl --silent --show-error --head --max-time 15 -H 'Host: zonghuin.com' http://127.0.0.1/)"
+              printf '%s\n' "$http_headers" | grep -Eq '^HTTP/[^ ]+ 301'
+              printf '%s\n' "$http_headers" | grep -Eiq '^Location: https://zonghuin\.com/'
+              curl --silent --show-error --fail --max-time 20 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/ -o /dev/null
+              curl --silent --show-error --fail --max-time 20 --resolve www.zonghuin.com:443:127.0.0.1 https://www.zonghuin.com/ -o /dev/null
+            }
+
+            if ! verify_runtime; then
+              restore_previous_config
+              exit 1
+            fi
+
+            echo "HTTPS enabled for zonghuin.com and www.zonghuin.com"
+            openssl x509 -in "$cert_file" -noout -subject -issuer -dates -fingerprint -sha256
