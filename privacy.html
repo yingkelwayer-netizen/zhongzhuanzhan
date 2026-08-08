@@ -2,16 +2,25 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>隐私权政策 - 牛宗汇律师导航页</title>
     <style>
-        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #121212; color: #fff; padding: 20px; line-height: 1.6; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #121212; color: #fff; padding: 20px; line-height: 1.6; }
         .container { max-width: 680px; margin: 0 auto; background: #222; padding: 30px; border-radius: 12px; }
         h1 { color: #F2D06B; font-size: 24px; text-align: center; }
         h2 { color: #F2D06B; font-size: 18px; margin-top: 20px; }
         p { font-size: 14px; margin-bottom: 15px; color: #ccc; }
         a { color: #F2D06B; text-decoration: none; }
         .back-btn { display: inline-block; margin-bottom: 20px; font-size: 14px; }
+        @media (max-width: 720px) {
+            html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+            body { min-height: 100vh; min-height: 100dvh; padding: 0; }
+            .container { width: 100%; max-width: none; min-height: 100vh; min-height: 100dvh; padding: 24px 18px calc(40px + env(safe-area-inset-bottom)); border-radius: 0; }
+            h1 { font-size: 28px; }
+            h2 { font-size: 20px; }
+            p, .back-btn { font-size: 16px; }
+        }
     </style>
 </head>
 <body>

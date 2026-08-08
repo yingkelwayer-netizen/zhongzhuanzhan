@@ -5,6 +5,8 @@
   "main": "build.js",
   "scripts": {
     "build": "node build.js",
+    "test": "npm run test:parallax",
+    "test:parallax": "node tests/parallax-structure.test.js",
     "watch:build": "nodemon --watch config.json --watch build.js --exec \"node build.js\"",
     "watch:serve": "live-server .",
     "dev": "concurrently \"npm run watch:build\" \"npm run watch:serve\""

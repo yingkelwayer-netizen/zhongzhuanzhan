@@ -13,14 +13,8 @@
         {
           "name": "⭐咨询网站⭐",
           "url": "http://www.niuzonghui.com",
-          "icon_type": "of",
-          "right_icon": "share"
-        },
-        {
-          "name": "民间借贷计算器",
-          "url": "http://www.ineedsomehelp.cn",
-          "icon_type": "fansly",
-          "right_icon": "lock"
+          "icon_type": "consult",
+          "right_icon": "external"
         }
       ]
     },
@@ -28,27 +22,33 @@
       "title": "诉讼仲裁教程",
       "links": [
         {
-          "name": "教程网站⚠搭建中⚠",
-          "url": "#",
-          "icon_type": "telegram",
-          "right_icon": "more"
+          "name": "我需要一些帮助网站",
+          "url": "http://www.ineedsomehelp.cn/",
+          "icon_type": "help",
+          "right_icon": "external"
         }
       ]
     },
     {
       "title": "最新内容",
       "links": [
-       {
+        {
+          "name": "三周没更新，我憋了个大的",
+          "url": "https://mp.weixin.qq.com/s/mswkg0gWxuTJjs_CwBEMhw",
+          "icon_type": "article",
+          "right_icon": "external"
+        },
+        {
           "name": "世界杯赌球完全指南⚽",
           "url": "https://mp.weixin.qq.com/s/MfZBPgb_mRFNE63L9B90cA",
-          "icon_type": "of",
-          "right_icon": "share"
+          "icon_type": "article",
+          "right_icon": "external"
         },
         {
           "name": "Qclaw:我做了个skill",
           "url": "https://mp.weixin.qq.com/s/X4SzpT0rClvtnDg8J2rthA",
-          "icon_type": "fansly",
-          "right_icon": "lock"
+          "icon_type": "article",
+          "right_icon": "external"
         }
       ]
     }
@@ -60,11 +60,22 @@
     },
     {
       "platform": "xiaohongshu",
-      "url": "#"
+      "url": "https://xhslink.cn/m/62XOrb1Qxgg"
+    },
+    {
+      "platform": "bilibili",
+      "url": "https://b23.tv/R2xtk6f"
     }
   ],
   "footer": [
-    { "name": "关于我", "url": "#" },
     { "name": "隐私权政策", "url": "./privacy.html" }
-  ]
+  ],
+  "copyright": {
+    "start_year": 2026,
+    "site_name": "ZongHuiN.com",
+    "suffix": "版权所有",
+    "icp_prefix": "ICP证：",
+    "icp_label": "津ICP备2020007055号-4",
+    "icp_url": "https://beian.miit.gov.cn/"
+  }
 }

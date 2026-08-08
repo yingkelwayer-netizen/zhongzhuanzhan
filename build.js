@@ -11,6 +11,10 @@ const icons = {
   telegram: `<svg viewBox="0 0 24 24" fill="#2AABEE"><circle cx="12" cy="12" r="12"/><path d="M5.5 11.5l13-5.5-2 14-4-3-2.5 2.5-.5-3.5 6.5-6-7 4.5-3.5-1.5z" fill="#fff"/></svg>`,
   iyaofans: `<svg viewBox="0 0 24 24" fill="#185ABD"><rect width="24" height="24" rx="6"/><text x="12" y="16" fill="#fff" font-size="10" font-weight="bold" font-family="Arial" text-anchor="middle">IYAO</text></svg>`,
   merch: `<svg viewBox="0 0 24 24" fill="#7A2222"><rect width="24" height="24" rx="6"/><circle cx="12" cy="10" r="4" fill="#fff"/><path d="M6 18c0-3 3-4 6-4s6 1 6 4" fill="#fff"/></svg>`,
+  consult: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.6 9.6 0 0 1-4.1-.9L3 21l1.8-4.8A8.8 8.8 0 0 1 3.5 12a8.5 8.5 0 0 1 9-8.5A8.4 8.4 0 0 1 21 11.5Z"/><path d="M8.5 10h7M8.5 14h4.5"/></svg>`,
+  help: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M12 9v6M9 12h6"/></svg>`,
+  article: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8.3L19 7.5v13.7H6Z"/><path d="M14 2.8v5h5M9 12h6M9 16h6"/></svg>`,
+  external: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>`,
   share: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="right-icon"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`,
   lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="right-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
   more: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="right-icon"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>`,
@@ -19,7 +23,8 @@ const icons = {
   instagram: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
   youtube: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.95C18.88 4 12 4 12 4s-6.88 0-8.6.47a2.78 2.78 0 0 0-1.94 1.95C1 8.14 1 12 1 12s0 3.86.46 5.58a2.78 2.78 0 0 0 1.94 1.95C5.12 20 12 20 12 20s6.88 0 8.6-.47a2.78 2.78 0 0 0 1.94-1.95C23 15.86 23 12 23 12s0-3.86-.46-5.58zM9.54 15.57V8.43L15.82 12z"/></svg>`,
   zhihu: `<svg viewBox="0 0 24 24" fill="#0066FF"><rect width="24" height="24" rx="6"/><text x="12" y="16" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif" text-anchor="middle">知</text></svg>`,
-  xiaohongshu: `<svg viewBox="0 0 24 24" fill="#FF2442"><rect width="24" height="24" rx="6"/><text x="12" y="16" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif" text-anchor="middle">红</text></svg>`
+  xiaohongshu: `<svg viewBox="0 0 24 24" fill="#FF2442"><rect width="24" height="24" rx="6"/><text x="12" y="16" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif" text-anchor="middle">红</text></svg>`,
+  bilibili: `<svg viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#FB7299"/><path d="m8 5 2 2m6-2-2 2M6.8 8.5h10.4A1.8 1.8 0 0 1 19 10.3v6.2a1.8 1.8 0 0 1-1.8 1.8H6.8A1.8 1.8 0 0 1 5 16.5v-6.2a1.8 1.8 0 0 1 1.8-1.8Z" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M9 12.2v1.7m6-1.7v1.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>`
 };
 
 const renderLinks = (categories) => {
@@ -30,14 +35,14 @@ const renderLinks = (categories) => {
         ${cat.links.map((link, linkIndex) => {
           const extraClass = (catIndex === 0 && linkIndex === 0) ? ' jump-anim' : '';
           return `
-          <a href="${link.url}" class="link-btn${extraClass}" target="_blank" rel="noopener noreferrer">
-            <div class="btn-left-icon">
+          <a href="${link.url}" class="link-btn${extraClass}" target="_blank" rel="noopener noreferrer" aria-label="${link.name}（在新窗口打开）">
+            <span class="btn-left-icon" aria-hidden="true">
               ${icons[link.icon_type] || ''}
-            </div>
+            </span>
             <span class="btn-text">${link.name}</span>
-            <div class="btn-right-icon">
+            <span class="btn-right-icon" aria-hidden="true">
               ${icons[link.right_icon] || ''}
-            </div>
+            </span>
           </a>
         `;
         }).join('')}
@@ -47,8 +52,14 @@ const renderLinks = (categories) => {
 };
 
 const renderSocials = (socials) => {
+  const socialLabels = {
+    zhihu: '知乎',
+    xiaohongshu: '小红书',
+    bilibili: '哔哩哔哩'
+  };
+
   return socials.map(s => `
-    <a href="${s.url}" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="${s.platform}">
+    <a href="${s.url}" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="访问${socialLabels[s.platform] || s.platform}" title="${socialLabels[s.platform] || s.platform}">
       ${icons[s.platform] || s.platform}
     </a>
   `).join('');
@@ -63,7 +74,7 @@ const htmlTemplate = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>${config.site_title}</title>
     <meta name="description" content="${config.seo_description}">
     <meta name="keywords" content="${config.seo_keywords}">
@@ -78,7 +89,8 @@ const htmlTemplate = `<!DOCTYPE html>
 
     <div class="page-shell">
       <!-- 头部背景图 -->
-      <div class="hero-bg" data-image-src="${config.profile.bg_image}" style="background-image: url('${config.profile.bg_image}');">
+      <div class="hero-bg" data-image-src="${config.profile.bg_image}">
+          <div class="hero-image-layer" style="background-image: url('${config.profile.bg_image}');" aria-hidden="true"></div>
           <div class="gradient-overlay"></div>
           <button class="share-button" type="button" aria-label="分享此页面" title="分享此页面">
             ${icons.share}
@@ -114,7 +126,13 @@ const htmlTemplate = `<!DOCTYPE html>
 
       <!-- 底部版权和隐私链接 -->
       <footer class="site-footer">
-          ${renderFooter(config.footer)}
+          <nav class="footer-nav" aria-label="页脚导航">
+            ${renderFooter(config.footer)}
+          </nav>
+          <p class="copyright-line">
+            <span class="copyright-text">© <span data-copyright-year data-start-year="${config.copyright.start_year}">${config.copyright.start_year}</span> ${config.copyright.site_name} ${config.copyright.suffix}</span>
+            <span class="icp-item"><span>${config.copyright.icp_prefix}</span><a href="${config.copyright.icp_url}" class="icp-link" target="_blank" rel="noopener noreferrer">${config.copyright.icp_label}</a></span>
+          </p>
       </footer>
     </div>
 
@@ -123,14 +141,77 @@ const htmlTemplate = `<!DOCTYPE html>
     <!-- 动态效果和默认处理 -->
     <script>
       const hero = document.querySelector('.hero-bg');
+      const heroImage = document.querySelector('.hero-image-layer');
+      const pageShell = document.querySelector('.page-shell');
       const shareButton = document.querySelector('.share-button');
       const shareToast = document.querySelector('.share-toast');
-      const bgImage = window.getComputedStyle(hero).backgroundImage;
+      const copyrightYear = document.querySelector('[data-copyright-year]');
+      const bgImage = window.getComputedStyle(heroImage).backgroundImage;
+
+      if (copyrightYear) {
+        const startYear = Number(copyrightYear.dataset.startYear);
+        const currentYear = new Date().getFullYear();
+        copyrightYear.textContent = currentYear > startYear ? startYear + '-' + currentYear : String(startYear);
+      }
 
       if (bgImage.includes('bg.jpg')) {
           hero.style.backgroundColor = '#111';
-          hero.style.backgroundImage = 'none';
+          heroImage.style.backgroundImage = 'none';
       }
+
+      // 双层视差：封面保持为粘性背景舞台，正文按正常页面速度从其上方滚过。
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let scrollFramePending = false;
+
+      function updateScrollProgress() {
+        scrollFramePending = false;
+        if (reduceMotion.matches) {
+          document.documentElement.style.setProperty('--scroll-progress', 0);
+          pageShell.style.setProperty('--scroll-progress', 0);
+          pageShell.style.setProperty('--hero-drift', '0px');
+          return;
+        }
+
+        const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+        const distance = Math.max(0, scrollTop - pageShell.offsetTop);
+        const progress = Math.min(1, distance / Math.max(hero.offsetHeight * 0.95, 1));
+        const heroDrift = Math.min(distance * 0.16, hero.offsetHeight * 0.16);
+        const value = progress.toFixed(3);
+        document.documentElement.style.setProperty('--scroll-progress', value);
+        pageShell.style.setProperty('--scroll-progress', value);
+        pageShell.style.setProperty('--hero-drift', heroDrift.toFixed(1) + 'px');
+      }
+
+      function requestScrollUpdate() {
+        if (scrollFramePending) return;
+        scrollFramePending = true;
+        window.requestAnimationFrame(updateScrollProgress);
+      }
+
+      window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+      window.addEventListener('resize', requestScrollUpdate, { passive: true });
+      reduceMotion.addEventListener?.('change', requestScrollUpdate);
+      updateScrollProgress();
+
+      // 内容按阅读顺序柔和浮现，避免所有卡片同时抢夺注意力。
+      document.documentElement.classList.add('has-motion');
+      const revealItems = document.querySelectorAll('.category-section, .socials-section');
+
+      if (reduceMotion.matches || !('IntersectionObserver' in window)) {
+        revealItems.forEach(function (item) { item.classList.add('is-visible'); });
+      } else {
+        const revealObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.16, rootMargin: '0px 0px -6% 0px' });
+
+        revealItems.forEach(function (item) { revealObserver.observe(item); });
+      }
+
+      window.requestAnimationFrame(function () { pageShell.classList.add('is-ready'); });
 
       // 从封面图提取两个高饱和度主色，驱动页面外侧光晕。
       function applyImageGlow(imageUrl) {
@@ -247,6 +328,6 @@ const htmlTemplate = `<!DOCTYPE html>
 </body>
 </html>`;
 
-// 写入 index.html
-fs.writeFileSync(path.join(__dirname, 'index.html'), htmlTemplate);
+// 写入 index.html，并清理模板循环产生的行尾空格。
+fs.writeFileSync(path.join(__dirname, 'index.html'), htmlTemplate.replace(/[ \t]+$/gm, ''));
 console.log('✅ 构建成功：index.html 已生成');
