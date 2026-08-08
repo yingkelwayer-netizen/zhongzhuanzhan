@@ -9,10 +9,15 @@ const deployWorkflow = process.env.TEST_COMMITTED_DEPLOY === '1'
   ? execFileSync('git', ['show', `HEAD:${workflowPath}`], { cwd: root, encoding: 'utf8' })
   : fs.readFileSync(path.join(root, workflowPath), 'utf8');
 
+const testStepIndex = deployWorkflow.indexOf('run: npm test');
+const deployStepIndex = deployWorkflow.indexOf('uses: appleboy/scp-action');
+assert(testStepIndex >= 0, 'The deploy workflow must run the complete test suite');
+assert(testStepIndex < deployStepIndex, 'The complete test suite must pass before files are uploaded');
+
 assert.match(
   deployWorkflow,
-  /source:\s*"index\.html,privacy\.html,style\.css,assets\/"/,
-  'The deploy workflow must continue uploading the generated static site'
+  /source:\s*"index\.html,about\.html,services\.html,insights\.html,contact\.html,privacy\.html,style\.css,robots\.txt,sitemap\.xml,assets\/"/,
+  'The deploy workflow must upload the generated pages and SEO discovery files'
 );
 
 assert.doesNotMatch(
