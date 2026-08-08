@@ -14,6 +14,9 @@ assert.match(workflow, /listen 443 ssl;/, 'HTTPS repair must configure a TLS lis
 assert.match(workflow, /return 301 https:\/\/\$host\$request_uri;/, 'HTTP traffic must redirect permanently to HTTPS');
 assert.match(workflow, /cert_public_key.*key_public_key/s, 'The workflow must verify that certificate and private key match');
 assert.match(workflow, /backup_conf.*restore_previous_config/s, 'The workflow must back up and roll back an invalid Nginx change');
+assert.match(workflow, /configured_fingerprint.*loaded_fingerprint/s, 'Runtime verification must confirm Nginx loaded the expected certificate');
+assert.match(workflow, /--noproxy '\*'/, 'Local runtime checks must bypass proxy settings');
+assert.match(workflow, /for attempt in 1 2 3 4 5 6 7 8 9 10/, 'Runtime verification must tolerate graceful Nginx reload delay');
 assert.doesNotMatch(workflow, /niuzonghui\.com/, 'The repair must not touch the unrelated niuzonghui.com site');
 
 console.log('HTTPS repair workflow verified: scoped certificate, redirect, validation, and rollback are present.');

@@ -165,11 +165,27 @@ jobs:
             fi
 
             verify_runtime() {
-              http_headers="$(curl --silent --show-error --head --max-time 15 -H 'Host: zonghuin.com' http://127.0.0.1/)"
-              printf '%s\n' "$http_headers" | grep -Eq '^HTTP/[^ ]+ 301'
-              printf '%s\n' "$http_headers" | grep -Eiq '^Location: https://zonghuin\.com/'
-              curl --silent --show-error --fail --max-time 20 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/ -o /dev/null
-              curl --silent --show-error --fail --max-time 20 --resolve www.zonghuin.com:443:127.0.0.1 https://www.zonghuin.com/ -o /dev/null
+              configured_fingerprint="$(openssl x509 -in "$cert_file" -noout -fingerprint -sha256)"
+
+              for attempt in 1 2 3 4 5 6 7 8 9 10; do
+                loaded_fingerprint="$(printf '' | openssl s_client -connect 127.0.0.1:443 -servername zonghuin.com 2>/dev/null | openssl x509 -noout -fingerprint -sha256 2>/dev/null || true)"
+
+                if [ "$loaded_fingerprint" = "$configured_fingerprint" ]; then
+                  http_headers="$(curl --noproxy '*' --silent --show-error --head --max-time 15 -H 'Host: zonghuin.com' http://127.0.0.1/)"
+                  if printf '%s\n' "$http_headers" | grep -Eq '^HTTP/[^ ]+ 301' \
+                    && printf '%s\n' "$http_headers" | grep -Eiq '^Location: https://zonghuin\.com/' \
+                    && curl --noproxy '*' --silent --show-error --fail --max-time 20 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/ -o /dev/null \
+                    && curl --noproxy '*' --silent --show-error --fail --max-time 20 --resolve www.zonghuin.com:443:127.0.0.1 https://www.zonghuin.com/ -o /dev/null; then
+                    return 0
+                  fi
+                fi
+
+                echo "Waiting for reloaded Nginx workers (attempt $attempt/10)"
+                sleep 1
+              done
+
+              echo "Nginx did not load the expected certificate and redirect in time"
+              return 1
             }
 
             if ! verify_runtime; then
