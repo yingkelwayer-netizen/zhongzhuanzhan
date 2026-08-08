@@ -1,20 +1,82 @@
 {
-  "site_title": "🦁牛宗汇律师|导航页",
-  "seo_description": "牛宗汇律师|盈科律师事务所牛律师的导航页",
-  "seo_keywords": "牛宗汇律师|导航页",
-  "profile": {
-    "name": "牛律师Atty.🦁",
-    "bg_image": "./assets/NIUZONGHUI.jpg"
+  "site": {
+    "url": "https://zonghuin.com",
+    "name": "牛宗汇律师",
+    "title": "牛宗汇律师 - 民商事诉讼、强制执行与财产保全",
+    "description": "牛宗汇律师，北京市盈科律师事务所律师，专注民商事诉讼、强制执行、财产保全及公司与股东争议解决。",
+    "last_modified": "2026-08-08",
+    "og_image": "/assets/og-card.jpg",
+    "theme_color": "#121212"
   },
-  "categories": [
+  "profile": {
+    "name": "牛宗汇律师",
+    "homepage_display_name": "牛律师Atty.🦁",
+    "full_name": "牛宗汇",
+    "firm": "北京市盈科律师事务所",
+    "job_title": "律师",
+    "education": "北京师范大学法学学士",
+    "role_line": "北京市盈科律师事务所律师",
+    "focus_line": "民商事诉讼 · 强制执行 · 财产保全",
+    "summary": "牛宗汇，毕业于北京师范大学，法学学士。主要处理民商事诉讼、强制执行和财产保全事务，关注公司之间、公司与股东之间的争议解决，以及追加被执行人、析产、历史股东责任和撤销权等执行衍生诉讼。长期关注互联网与区块链行业，熟悉科技公司业务场景。",
+    "disclaimer": "本站为牛宗汇律师个人信息与内容入口，并非北京市盈科律师事务所官方网站。页面内容仅作一般信息参考，不构成针对具体案件的法律意见。",
+    "image_alt": "牛宗汇律师职业形象照",
+    "images": {
+      "original": "./assets/NIUZONGHUI.jpg",
+      "avif_1280": "./assets/NIUZONGHUI-1280.avif",
+      "avif_1920": "./assets/NIUZONGHUI-1920.avif",
+      "webp_1280": "./assets/NIUZONGHUI-1280.webp",
+      "webp_1920": "./assets/NIUZONGHUI-1920.webp",
+      "jpg_1280": "./assets/NIUZONGHUI-1280.jpg",
+      "jpg_1920": "./assets/NIUZONGHUI-1920.jpg"
+    },
+    "phones": [
+      {
+        "label": "+86 132 6951 7793",
+        "value": "+8613269517793",
+        "note": "中国大陆"
+      },
+      {
+        "label": "+1 (858) 876-2888",
+        "value": "+18588762888",
+        "note": "国际联系方式"
+      }
+    ],
+    "email": "niuzonghui@yingkelawyer.com"
+  },
+  "navigation": [
+    {
+      "name": "律师简介",
+      "url": "./about.html",
+      "description": "教育、执业与行业背景",
+      "icon_type": "person"
+    },
+    {
+      "name": "专业领域",
+      "url": "./services.html",
+      "description": "诉讼、执行与财产保全",
+      "icon_type": "briefcase"
+    },
+    {
+      "name": "文章与观点",
+      "url": "./insights.html",
+      "description": "法律观察与个人创作",
+      "icon_type": "article"
+    },
+    {
+      "name": "联系律师",
+      "url": "./contact.html",
+      "description": "电话、邮箱与咨询说明",
+      "icon_type": "contact"
+    }
+  ],
+  "homepage_categories": [
     {
       "title": "成为我的客户",
       "links": [
         {
           "name": "⭐咨询网站⭐",
-          "url": "http://www.niuzonghui.com",
-          "icon_type": "consult",
-          "right_icon": "external"
+          "url": "https://www.niuzonghui.com/",
+          "icon_type": "consult"
         }
       ]
     },
@@ -23,9 +85,8 @@
       "links": [
         {
           "name": "我需要一些帮助网站",
-          "url": "http://www.ineedsomehelp.cn/",
-          "icon_type": "help",
-          "right_icon": "external"
+          "url": "https://www.ineedsomehelp.cn/",
+          "icon_type": "help"
         }
       ]
     },
@@ -35,20 +96,204 @@
         {
           "name": "三周没更新，我憋了个大的",
           "url": "https://mp.weixin.qq.com/s/mswkg0gWxuTJjs_CwBEMhw",
-          "icon_type": "article",
-          "right_icon": "external"
+          "icon_type": "article"
         },
         {
           "name": "世界杯赌球完全指南⚽",
           "url": "https://mp.weixin.qq.com/s/MfZBPgb_mRFNE63L9B90cA",
-          "icon_type": "article",
-          "right_icon": "external"
+          "icon_type": "article"
         },
         {
           "name": "Qclaw:我做了个skill",
           "url": "https://mp.weixin.qq.com/s/X4SzpT0rClvtnDg8J2rthA",
-          "icon_type": "article",
-          "right_icon": "external"
+          "icon_type": "article"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "file": "about.html",
+      "nav_name": "律师简介",
+      "title": "牛宗汇律师简介 - 教育、执业与行业背景",
+      "description": "了解牛宗汇律师的教育背景、专业方向、公司争议与强制执行经验，以及互联网和区块链行业理解。",
+      "eyebrow": "律师简介",
+      "heading": "牛宗汇律师简介",
+      "lead": "牛宗汇，北京市盈科律师事务所律师，毕业于北京师范大学，法学学士。专业方向为民商事诉讼、强制执行和财产保全。",
+      "search_terms": [
+        "北京民商事诉讼律师",
+        "北京企业法律顾问"
+      ],
+      "sections": [
+        {
+          "heading": "北京民商事诉讼律师背景",
+          "paragraphs": [
+            "主要处理公司之间、公司与股东之间的争议解决和强制执行，并关注由强制执行派生的追加被执行人诉讼、析产诉讼、追加历史股东诉讼和撤销权诉讼。",
+            "除法律专业背景外，牛宗汇律师具有网络技术背景和会计职称，能够从法律、技术与财务多个角度理解科技企业的业务与争议。"
+          ]
+        },
+        {
+          "heading": "北京企业法律顾问与行业经验",
+          "paragraphs": [
+            "长期关注互联网行业和区块链行业，熟悉科技公司常见业务场景，现担任北京搜药公司法律顾问。这些经历有助于理解北京企业，尤其是互联网公司在法律顾问服务中常见的业务与合规问题。",
+            "处理具体事务时，重视事实材料、交易结构、财产线索与执行路径之间的衔接。"
+          ]
+        },
+        {
+          "heading": "主要方向",
+          "bullets": [
+            "民商事诉讼与公司争议解决",
+            "强制执行、追加被执行人与执行衍生诉讼",
+            "诉前、诉中财产保全",
+            "互联网及区块链行业相关法律事务"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "services.html",
+      "nav_name": "专业领域",
+      "title": "北京公司纠纷与强制执行律师 - 股东争议、财产保全 - 牛宗汇律师",
+      "description": "牛宗汇律师处理北京公司与股东纠纷、企业诉讼、强制执行、追加被执行人及诉前诉中财产保全等事项。",
+      "eyebrow": "专业领域",
+      "heading": "诉讼、执行与财产保全",
+      "lead": "围绕公司经营、股东关系和债权实现过程中出现的争议，提供从诉讼方案、财产保全到强制执行及衍生诉讼的法律服务。",
+      "search_terms": [
+        "北京公司纠纷律师",
+        "北京强制执行律师",
+        "北京财产保全律师"
+      ],
+      "sections": [
+        {
+          "heading": "北京公司纠纷律师与股东争议",
+          "paragraphs": [
+            "牛宗汇律师处理北京企业诉讼、股东纠纷与股权争议事项，关注公司之间、公司与股东之间的合同履行、股权与治理争议，结合交易文件、公司决议、出资情况和实际履行过程分析争议解决路径。"
+          ],
+          "links": [
+            {
+              "name": "查看民商事诉讼业务介绍",
+              "url": "https://www.niuzonghui.com/practice-areas/minshangshi-susong"
+            },
+            {
+              "name": "查看公司争议业务介绍",
+              "url": "https://www.niuzonghui.com/practice-areas/gongsi-zhengyi"
+            }
+          ]
+        },
+        {
+          "heading": "北京强制执行律师与衍生诉讼",
+          "paragraphs": [
+            "为北京地区的强制执行及追加被执行人事务提供律师服务，关注生效法律文书的执行、财产线索整理、追加被执行人，以及代位析产、追加历史股东和撤销权等与执行衔接的诉讼程序。"
+          ],
+          "links": [
+            {
+              "name": "查看强制执行业务介绍",
+              "url": "https://www.niuzonghui.com/practice-areas/qiangzhi-zhixing"
+            },
+            {
+              "name": "查看执行衍生诉讼介绍",
+              "url": "https://www.niuzonghui.com/practice-areas/yansheng-susong"
+            }
+          ]
+        },
+        {
+          "heading": "北京财产保全律师服务",
+          "paragraphs": [
+            "为北京地区的诉前、诉中财产保全事项提供律师服务，根据案件阶段、争议金额和已掌握的财产信息，关注财产保全与后续诉讼、执行程序的衔接。财产保全是否适合个案，应结合具体证据和风险判断。"
+          ],
+          "links": [
+            {
+              "name": "查看财产保全业务介绍",
+              "url": "https://www.niuzonghui.com/practice-areas/caichan-baoquan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "insights.html",
+      "nav_name": "文章与观点",
+      "title": "文章与观点 - 法律观察与个人创作 - 牛宗汇律师",
+      "description": "汇总牛宗汇律师发布的法律与社会观察、互联网科技内容和个人创作，原文主要发布于微信公众号。",
+      "eyebrow": "文章与观点",
+      "heading": "法律观察与个人创作",
+      "lead": "这里汇总法律、社会议题与互联网技术相关内容。文章体现的是发布时的个人观点，不替代针对具体案件的法律分析。",
+      "sections": [
+        {
+          "heading": "近期更新",
+          "links": [
+            {
+              "name": "三周没更新，我憋了个大的",
+              "description": "微信公众号文章",
+              "url": "https://mp.weixin.qq.com/s/mswkg0gWxuTJjs_CwBEMhw"
+            },
+            {
+              "name": "世界杯赌球完全指南⚽",
+              "description": "法律与社会观察",
+              "url": "https://mp.weixin.qq.com/s/MfZBPgb_mRFNE63L9B90cA"
+            },
+            {
+              "name": "Qclaw：我做了个 Skill",
+              "description": "技术与个人创作",
+              "url": "https://mp.weixin.qq.com/s/X4SzpT0rClvtnDg8J2rthA"
+            }
+          ]
+        },
+        {
+          "heading": "内容方向",
+          "paragraphs": [
+            "关注公司争议、强制执行及其衍生诉讼，也持续记录互联网、区块链和人工智能工具相关的实践与思考。",
+            "后续法律实务内容将优先说明作者、发布日期、适用背景与信息来源，便于读者判断内容的时效性和适用范围。"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "contact.html",
+      "nav_name": "联系律师",
+      "title": "北京法律咨询律师联系方式 - 牛宗汇律师电话与邮箱",
+      "description": "需要咨询北京公司纠纷、股东争议、强制执行或财产保全事项，可查看牛宗汇律师电话、邮箱与初次沟通说明。",
+      "eyebrow": "联系方式",
+      "heading": "联系牛宗汇律师",
+      "lead": "如需寻找北京法律咨询律师，沟通民商事诉讼、强制执行、财产保全或公司与股东争议，可通过以下电话或邮箱联系。是否能够接受委托，应在完成利益冲突检索和案件材料评估后确定。",
+      "search_terms": [
+        "北京法律咨询律师",
+        "北京律师电话联系方式"
+      ],
+      "sections": [
+        {
+          "heading": "北京律师电话联系方式",
+          "links": [
+            {
+              "name": "+86 132 6951 7793",
+              "description": "中国大陆",
+              "url": "tel:+8613269517793"
+            },
+            {
+              "name": "+1 (858) 876-2888",
+              "description": "国际联系方式",
+              "url": "tel:+18588762888"
+            }
+          ]
+        },
+        {
+          "heading": "电子邮箱",
+          "links": [
+            {
+              "name": "niuzonghui@yingkelawyer.com",
+              "description": "发送邮件",
+              "url": "mailto:niuzonghui@yingkelawyer.com"
+            }
+          ]
+        },
+        {
+          "heading": "初次沟通提示",
+          "bullets": [
+            "可先简要说明争议主体、事项类型、当前阶段和主要诉求",
+            "请勿在尚未确认委托关系前发送身份证件、账户密码等敏感信息",
+            "网页浏览、电话或邮件沟通本身不当然建立律师与客户关系",
+            "每个案件事实不同，既往经验不构成对案件结果的承诺"
+          ]
         }
       ]
     }
@@ -56,19 +301,19 @@
   "socials": [
     {
       "platform": "zhihu",
+      "label": "知乎",
       "url": "https://www.zhihu.com/people/adminxiao-niu"
     },
     {
       "platform": "xiaohongshu",
-      "url": "https://xhslink.cn/m/62XOrb1Qxgg"
+      "label": "小红书",
+      "url": "https://www.xiaohongshu.com/user/profile/5f7c516d000000000100524d"
     },
     {
       "platform": "bilibili",
-      "url": "https://b23.tv/R2xtk6f"
+      "label": "哔哩哔哩",
+      "url": "https://space.bilibili.com/334712236"
     }
-  ],
-  "footer": [
-    { "name": "隐私权政策", "url": "./privacy.html" }
   ],
   "copyright": {
     "start_year": 2026,

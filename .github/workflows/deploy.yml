@@ -18,9 +18,11 @@ jobs:
       with:
         node-version: '24'
 
+    - name: 运行发布前测试
+      run: npm test
+
     - name: 编译生成静态网页
-      run: |
-        node build.js
+      run: node build.js
 
     - name: 部署到阿里云 ECS
       uses: appleboy/scp-action@v1.0.0
@@ -29,7 +31,7 @@ jobs:
         username: root
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
-        source: "index.html,privacy.html,style.css,assets/"
+        source: "index.html,about.html,services.html,insights.html,contact.html,privacy.html,style.css,robots.txt,sitemap.xml,assets/"
         target: "/www/wwwroot/zhongzhuanzhan"
 
     # Nginx、证书与 HTTPS 跳转由宝塔站点配置统一管理。
