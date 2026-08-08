@@ -56,6 +56,20 @@ jobs:
               done
             done
 
+            echo "=== Domain ownership search ==="
+            for domain in zonghuin.com niuzonghui.com; do
+              echo "--- Nginx files mentioning ${domain} ---"
+              grep -RIl --include='*.conf' "$domain" /www/server/panel/vhost/nginx 2>/dev/null | sort || true
+
+              echo "--- Certificates covering ${domain} ---"
+              find /www/server/panel/vhost/cert -type f \( -name 'fullchain.pem' -o -name 'cert.pem' \) -print 2>/dev/null | sort | while IFS= read -r cert_file; do
+                if openssl x509 -in "$cert_file" -noout -checkhost "$domain" >/dev/null 2>&1; then
+                  echo "MATCHING_CERT=$cert_file"
+                  openssl x509 -in "$cert_file" -noout -subject -issuer -dates -fingerprint -sha256 -ext subjectAltName 2>&1 || true
+                fi
+              done
+            done
+
             echo "=== Nginx syntax ==="
             if [ -n "${nginx_bin:-}" ]; then
               "$nginx_bin" -t
