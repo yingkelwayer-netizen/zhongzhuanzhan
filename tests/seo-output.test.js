@@ -47,6 +47,11 @@ for (const file of indexableFiles) {
 }
 
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+assert.match(
+  home,
+  /<meta name="baidu-site-verification" content="codeva-Y9cLvzfXfq">/,
+  'Homepage must retain the Baidu ownership verification tag'
+);
 const approvedHomeBody = home.slice(home.indexOf('<body'), home.lastIndexOf('</body>') + '</body>'.length);
 const approvedHomeBodyHash = crypto.createHash('sha256').update(approvedHomeBody).digest('hex').toUpperCase();
 assert.strictEqual(

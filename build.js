@@ -149,6 +149,9 @@ function renderHead({ file, title, description, navName, noindex = false, preloa
     : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
   const preload = preloadHero ? `
     <link rel="preload" as="image" href="${escapeHtml(config.profile.images.avif_1280)}" type="image/avif" fetchpriority="high" imagesrcset="${escapeHtml(config.profile.images.avif_1280)} 1280w, ${escapeHtml(config.profile.images.avif_1920)} 1920w" imagesizes="(max-width: 720px) 100vw, 680px">` : '';
+  const baiduVerification = file === 'index.html'
+    ? '\n    <meta name="baidu-site-verification" content="codeva-Y9cLvzfXfq">'
+    : '';
   const data = structuredDataForPage({ file, title, description, navName });
 
   return `
@@ -157,7 +160,7 @@ function renderHead({ file, title, description, navName, noindex = false, preloa
     <meta name="applicable-device" content="pc,mobile">
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}">
-    <meta name="author" content="${escapeHtml(config.profile.full_name)}">
+    <meta name="author" content="${escapeHtml(config.profile.full_name)}">${baiduVerification}
     <meta name="robots" content="${robots}">
     <meta name="theme-color" content="${escapeHtml(config.site.theme_color)}">
     <link rel="canonical" href="${canonical}">
