@@ -16,8 +16,8 @@ assert(testStepIndex < deployStepIndex, 'The complete test suite must pass befor
 
 assert.match(
   deployWorkflow,
-  /source:\s*"index\.html,about\.html,services\.html,insights\.html,contact\.html,privacy\.html,style\.css,robots\.txt,sitemap\.xml,assets\/"/,
-  'The deploy workflow must upload the generated pages and SEO discovery files'
+  /source:\s*"index\.html,about\.html,services\.html,insights\.html,contact\.html,privacy\.html,style\.css,robots\.txt,sitemap\.xml,insights\/,assets\/"/,
+  'The deploy workflow must upload the generated pages, article directory, and SEO discovery files'
 );
 
 assert.doesNotMatch(

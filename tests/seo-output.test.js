@@ -6,10 +6,11 @@ const { execFileSync } = require('child_process');
 
 const root = path.join(__dirname, '..');
 const config = JSON.parse(fs.readFileSync(path.join(root, 'config.json'), 'utf8'));
+const articles = JSON.parse(fs.readFileSync(path.join(root, 'articles.json'), 'utf8'));
 
 execFileSync(process.execPath, ['build.js'], { cwd: root, stdio: 'pipe' });
 
-const indexableFiles = ['index.html', ...config.pages.map((page) => page.file)];
+const indexableFiles = ['index.html', ...config.pages.map((page) => page.file), ...articles.map((article) => article.file)];
 const titles = new Set();
 const canonicals = new Set();
 
@@ -47,6 +48,12 @@ for (const file of indexableFiles) {
 }
 
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const approvedHomeHash = crypto.createHash('sha256').update(home).digest('hex').toUpperCase();
+assert.strictEqual(
+  approvedHomeHash,
+  '43690D1F198A09CB6866951741FCDC218F2FA9D79502828915AF7AA8815A102A',
+  'Homepage file must remain byte-for-byte identical to the owner-approved version'
+);
 assert.match(
   home,
   /<meta name="baidu-site-verification" content="codeva-Y9cLvzfXfq">/,
@@ -86,6 +93,48 @@ for (const page of config.pages) {
   }
 }
 
+assert.strictEqual(articles.length, 5, 'The first research batch must contain exactly five substantial articles');
+assert.strictEqual(new Set(articles.map((article) => article.id)).size, articles.length, 'Article ids must be unique');
+assert.strictEqual(new Set(articles.map((article) => article.slug)).size, articles.length, 'Article slugs must be unique');
+
+const insights = fs.readFileSync(path.join(root, 'insights.html'), 'utf8');
+const officialSourceHosts = new Set(['www.npc.gov.cn', 'www.court.gov.cn', 'gongbao.court.gov.cn', 'ipc.court.gov.cn']);
+for (const article of articles) {
+  assert.strictEqual(article.file, `insights/${article.slug}`, `${article.slug} must use the stable insights URL namespace`);
+  assert(insights.includes(`href="./${article.file}"`), `Insights index must visibly link to ${article.file}`);
+
+  const articleHtml = fs.readFileSync(path.join(root, article.file), 'utf8');
+  assert.match(articleHtml, new RegExp(`<article id="${article.id}" data-article-id="${article.id}" class="content-main">`), `${article.file} must preserve a stable semantic article mount`);
+  assert.strictEqual(matches(articleHtml, new RegExp(`<div data-article-interactions-root data-article-id="${article.id}" aria-hidden="true"></div>`, 'g')).length, 1, `${article.file} must expose exactly one empty interaction mount point`);
+  assert(articleHtml.includes(`<h1>${article.heading}</h1>`), `${article.file} must use its unique H1`);
+  assert(articleHtml.includes(article.lead), `${article.file} must open with its direct answer`);
+  assert(articleHtml.includes('作者：牛宗汇律师'), `${article.file} must visibly identify the author`);
+  assert(articleHtml.includes('发布日期：2026年08月11日'), `${article.file} must visibly show its publication date`);
+  assert(articleHtml.includes('更新时间：2026年08月11日'), `${article.file} must visibly show its update date`);
+  assert(articleHtml.includes(`适用范围：${article.scope}`), `${article.file} must visibly state its scope`);
+  assert.match(articleHtml, /不构成对任何具体案件的法律意见/, `${article.file} must include a non-case legal-advice notice`);
+  assert.match(articleHtml, /证据|材料/, `${article.file} must include an evidence or materials section`);
+  assert.match(articleHtml, /常见[^<]*(?:不适用|不支持|不能|误区|被驳回|不宜)|容易[^<]*(?:失败|误判)/, `${article.file} must explain common failure or non-applicable situations`);
+  assert.doesNotMatch(articleHtml, /data-share-button(?:\s|>)/, `${article.file} must not implement the separately scoped sharing UI`);
+  assert.doesNotMatch(articleHtml, /阅读量|点赞数|转发数|评论数/, `${article.file} must not contain invented engagement metrics`);
+  assert.doesNotMatch(articleHtml, /北京(?:律师|法律咨询)|收费|委托|计算器|模板下载/, `${article.file} must not compete for commercial or self-service search intent`);
+
+  const articleData = JSON.parse(articleHtml.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const articleNode = articleData['@graph'].find((node) => node['@type'] === 'Article');
+  assert(articleNode, `${article.file} must include Article JSON-LD`);
+  assert.strictEqual(articleNode['@id'], `${config.site.url}/${article.file}#article`, `${article.file} must expose its stable article entity id`);
+  assert.strictEqual(articleNode.headline, article.heading, `${article.file} structured headline must match the visible H1`);
+  assert.strictEqual(articleNode.datePublished, article.published, `${article.file} must expose its publication date`);
+  assert.strictEqual(articleNode.dateModified, article.modified, `${article.file} must expose its update date`);
+  assert.strictEqual(articleNode.author['@id'], `${config.site.url}/#person`, `${article.file} must attribute the existing Person entity`);
+  assert.deepStrictEqual(articleNode.citation, article.sources.map((source) => source.url), `${article.file} citations must match visible official sources`);
+  for (const source of article.sources) {
+    const sourceUrl = new URL(source.url);
+    assert(officialSourceHosts.has(sourceUrl.hostname), `${article.file} source must use an approved first-party official host: ${source.url}`);
+    assert(articleHtml.includes(`href="${source.url}"`), `${article.file} must visibly link its structured source: ${source.url}`);
+  }
+}
+
 const services = fs.readFileSync(path.join(root, 'services.html'), 'utf8');
 assert.match(services, /<h2>北京公司纠纷律师与股东争议<\/h2>/, 'Services page must naturally target Beijing company disputes');
 assert.match(services, /<h2>北京强制执行律师与衍生诉讼<\/h2>/, 'Services page must naturally target Beijing enforcement matters');
@@ -114,4 +163,4 @@ for (const asset of ['NIUZONGHUI-1920.avif', 'NIUZONGHUI-1920.webp', 'NIUZONGHUI
   assert(size < 150 * 1024, `${asset} should stay below the 150 KB image budget`);
 }
 
-console.log(`SEO output verified: ${indexableFiles.length} indexable pages with unique metadata, canonical URLs, JSON-LD, sitemap coverage, and optimized images.`);
+console.log(`SEO output verified: ${indexableFiles.length} indexable pages including ${articles.length} sourced practice articles, with unique metadata, canonical URLs, JSON-LD, sitemap coverage, and an unchanged homepage.`);

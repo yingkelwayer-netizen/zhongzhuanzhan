@@ -218,7 +218,38 @@
       "eyebrow": "文章与观点",
       "heading": "法律观察与个人创作",
       "lead": "这里汇总法律、社会议题与互联网技术相关内容。文章体现的是发布时的个人观点，不替代针对具体案件的法律分析。",
+      "last_modified": "2026-08-11",
       "sections": [
+        {
+          "heading": "公司争议与强制执行实务研究",
+          "links": [
+            {
+              "name": "公司欠钱时，股东何时可能承担责任",
+              "description": "公司债务与股东责任边界",
+              "url": "./insights/company-debt-shareholder-liability.html"
+            },
+            {
+              "name": "追加股东为被执行人的法定条件",
+              "description": "执行追加规则与责任范围",
+              "url": "./insights/add-shareholder-as-enforcement-debtor.html"
+            },
+            {
+              "name": "申请追加股东需要的证据与材料",
+              "description": "按法定情形组织证据",
+              "url": "./insights/evidence-for-adding-shareholder.html"
+            },
+            {
+              "name": "股东出资加速到期的适用情形",
+              "description": "不能清偿到期债务时的判断",
+              "url": "./insights/shareholder-capital-contribution-acceleration.html"
+            },
+            {
+              "name": "终本后如何判断与恢复执行",
+              "description": "财产线索、恢复条件与材料重点",
+              "url": "./insights/resume-enforcement-after-termination.html"
+            }
+          ]
+        },
         {
           "heading": "近期更新",
           "links": [

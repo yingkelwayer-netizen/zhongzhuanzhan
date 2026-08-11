@@ -3,6 +3,7 @@ const path = require('path');
 
 const root = __dirname;
 const config = JSON.parse(fs.readFileSync(path.join(root, 'config.json'), 'utf8'));
+const articles = JSON.parse(fs.readFileSync(path.join(root, 'articles.json'), 'utf8'));
 
 const escapeHtml = (value = '') => String(value)
   .replace(/&/g, '&amp;')
@@ -111,7 +112,7 @@ function structuredDataForPage({ file, title, description, navName }) {
       width: 1200,
       height: 630
     },
-    dateModified: config.site.last_modified
+    dateModified: pageConfig?.last_modified || config.site.last_modified
   };
 
   if (pageConfig?.search_terms?.length) webpage.keywords = pageConfig.search_terms.join(', ');
@@ -186,6 +187,120 @@ function renderHead({ file, title, description, navName, noindex = false, preloa
     <meta name="twitter:description" content="${escapeHtml(description)}">
     <meta name="twitter:image" content="${absoluteUrl(config.site.og_image)}">
     <script type="application/ld+json">${jsonLd(data)}</script>`;
+}
+
+function structuredDataForArticle(article) {
+  const url = pageUrl(article.file);
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      websiteEntity,
+      personEntity,
+      {
+        '@type': 'Article',
+        '@id': `${url}#article`,
+        url,
+        mainEntityOfPage: { '@id': `${url}#webpage` },
+        headline: article.heading,
+        description: article.description,
+        inLanguage: 'zh-CN',
+        datePublished: article.published,
+        dateModified: article.modified,
+        author: { '@id': `${config.site.url}/#person` },
+        publisher: { '@id': `${config.site.url}/#person` },
+        isPartOf: { '@id': `${config.site.url}/#website` },
+        about: article.topics,
+        keywords: article.topics.join(', '),
+        citation: article.sources.map((source) => source.url)
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${url}#webpage`,
+        url,
+        name: article.title,
+        description: article.description,
+        inLanguage: 'zh-CN',
+        isPartOf: { '@id': `${config.site.url}/#website` },
+        about: { '@id': `${url}#article` },
+        datePublished: article.published,
+        dateModified: article.modified
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${url}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: `${config.site.url}/` },
+          { '@type': 'ListItem', position: 2, name: '文章与观点', item: `${config.site.url}/insights.html` },
+          { '@type': 'ListItem', position: 3, name: article.heading, item: url }
+        ]
+      }
+    ]
+  };
+}
+
+function renderArticleHead(article) {
+  const canonical = pageUrl(article.file);
+  return `
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="applicable-device" content="pc,mobile">
+    <title>${escapeHtml(article.title)}</title>
+    <meta name="description" content="${escapeHtml(article.description)}">
+    <meta name="author" content="${escapeHtml(config.profile.full_name)}">
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+    <meta name="theme-color" content="${escapeHtml(config.site.theme_color)}">
+    <link rel="canonical" href="${canonical}">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/favicon-48.png" type="image/png" sizes="48x48">
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="${escapeHtml(config.site.name)}">
+    <meta property="og:title" content="${escapeHtml(article.title)}">
+    <meta property="og:description" content="${escapeHtml(article.description)}">
+    <meta property="og:url" content="${canonical}">
+    <meta property="og:image" content="${absoluteUrl(config.site.og_image)}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="${escapeHtml(config.profile.name)}职业形象">
+    <meta property="article:author" content="${escapeHtml(config.profile.full_name)}">
+    <meta property="article:published_time" content="${article.published}">
+    <meta property="article:modified_time" content="${article.modified}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${escapeHtml(article.title)}">
+    <meta name="twitter:description" content="${escapeHtml(article.description)}">
+    <meta name="twitter:image" content="${absoluteUrl(config.site.og_image)}">
+    <script type="application/ld+json">${jsonLd(structuredDataForArticle(article))}</script>`;
+}
+
+function renderArticleSiteNav() {
+  const items = [
+    '<a href="../">首页</a>',
+    ...config.navigation.map((item) => {
+      const current = item.url === './insights.html' ? ' aria-current="page"' : '';
+      return `<a href="../${escapeHtml(item.file || item.url.replace(/^\.\//, ''))}"${current}>${escapeHtml(item.name)}</a>`;
+    })
+  ];
+  return `<nav class="site-nav" aria-label="主要导航">${items.join('')}</nav>`;
+}
+
+function renderArticleFooter() {
+  const footerLinks = [
+    ...config.navigation.map((item) => `<a href="../${escapeHtml(item.file || item.url.replace(/^\.\//, ''))}" class="footer-link">${escapeHtml(item.name)}</a>`),
+    '<a href="../privacy.html" class="footer-link">隐私权政策</a>'
+  ].join(' &middot; ');
+  return `
+      <footer class="site-footer">
+        <nav class="footer-nav" aria-label="页脚导航">${footerLinks}</nav>
+        <p class="copyright-line">
+          <span class="copyright-text">© <span data-copyright-year data-start-year="${config.copyright.start_year}">${config.copyright.start_year}</span> ${escapeHtml(config.copyright.site_name)} ${escapeHtml(config.copyright.suffix)}</span>
+          <span class="icp-item"><span>${escapeHtml(config.copyright.icp_prefix)}</span><a href="${escapeHtml(config.copyright.icp_url)}" class="icp-link" target="_blank" rel="noopener noreferrer">${escapeHtml(config.copyright.icp_label)}</a></span>
+        </p>
+      </footer>`;
 }
 
 function renderSiteNav(currentFile) {
@@ -579,6 +694,79 @@ function buildContentPage(page) {
 </html>`;
 }
 
+function buildArticlePage(article) {
+  const relatedArticles = article.related
+    .map((slug) => articles.find((item) => item.slug === slug))
+    .filter(Boolean);
+  const publicationDate = article.published.replace(/-/g, '年').replace(/年(\d{2})年/, '年$1月') + '日';
+  const modifiedDate = article.modified.replace(/-/g, '年').replace(/年(\d{2})年/, '年$1月') + '日';
+
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>${renderArticleHead(article)}
+</head>
+<body class="content-body">
+  <div class="ambient-backdrop" aria-hidden="true"></div>
+  <div class="content-shell">
+    <header class="content-topbar">
+      <a href="../" class="brand-link" aria-label="返回牛宗汇律师首页">
+        <span class="brand-mark" aria-hidden="true">牛</span>
+        <span>${escapeHtml(config.site.name)}</span>
+      </a>
+    </header>
+    ${renderArticleSiteNav()}
+
+    <article id="${escapeHtml(article.id)}" data-article-id="${escapeHtml(article.id)}" class="content-main">
+      <nav class="breadcrumb" aria-label="面包屑导航">
+        <a href="../">首页</a><span aria-hidden="true">/</span><a href="../insights.html">文章与观点</a><span aria-hidden="true">/</span><span aria-current="page">${escapeHtml(article.heading)}</span>
+      </nav>
+      <header class="content-hero">
+        <p class="content-eyebrow">${escapeHtml(article.eyebrow)}</p>
+        <h1>${escapeHtml(article.heading)}</h1>
+        <p class="content-lead">${escapeHtml(article.lead)}</p>
+      </header>
+
+      <section class="content-section" aria-labelledby="article-information-${escapeHtml(article.slug)}">
+        <h2 id="article-information-${escapeHtml(article.slug)}">文章信息</h2>
+        <ul>
+          <li>作者：${escapeHtml(config.profile.full_name)}律师</li>
+          <li>发布日期：${publicationDate}</li>
+          <li>更新时间：${modifiedDate}</li>
+          <li>适用范围：${escapeHtml(article.scope)}</li>
+        </ul>
+      </section>
+      ${article.sections.map(renderContentSection).join('')}
+
+      <section class="content-section">
+        <h2>现行官方法源</h2>
+        <p>以下链接均指向全国人大、最高人民法院或人民法院的公开法源，便于核对条文与适用背景。</p>
+        ${renderContentLinks(article.sources)}
+      </section>
+
+      <div data-article-interactions-root data-article-id="${escapeHtml(article.id)}" aria-hidden="true"></div>
+
+      <section class="content-section">
+        <h2>相关阅读</h2>
+        ${renderContentLinks(relatedArticles.map((related) => ({
+          name: related.heading,
+          description: related.description,
+          url: `./${related.slug}`
+        })))}
+      </section>
+
+      <aside class="legal-note">
+        <strong>重要说明</strong>
+        <p>本文仅基于截至${modifiedDate}现行公开法源进行一般性实务研究，不构成对任何具体案件的法律意见。个案应结合事实、证据、程序阶段和最新规则独立判断。</p>
+      </aside>
+      <a class="content-cta" href="../insights.html">返回文章与观点<span aria-hidden="true">${icons.arrow}</span></a>
+    </article>
+    ${renderArticleFooter()}
+  </div>
+  ${renderCopyrightAndShareScript(article.description)}
+</body>
+</html>`;
+}
+
 function buildPrivacyPage() {
   const file = 'privacy.html';
   const title = '隐私权政策 - 牛宗汇律师';
@@ -647,15 +835,16 @@ Sitemap: ${config.site.url}/sitemap.xml
 
 function buildSitemap() {
   const entries = [
-    { file: 'index.html', priority: '1.0', changefreq: 'weekly' },
-    ...config.pages.map((page) => ({ file: page.file, priority: '0.8', changefreq: page.file === 'insights.html' ? 'weekly' : 'monthly' }))
+    { file: 'index.html', priority: '1.0', changefreq: 'weekly', lastmod: config.site.last_modified },
+    ...config.pages.map((page) => ({ file: page.file, priority: '0.8', changefreq: page.file === 'insights.html' ? 'weekly' : 'monthly', lastmod: page.last_modified || config.site.last_modified })),
+    ...articles.map((article) => ({ file: article.file, priority: '0.7', changefreq: 'monthly', lastmod: article.modified }))
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">
 ${entries.map((entry) => `  <url>
     <loc>${escapeXml(pageUrl(entry.file))}</loc>
-    <lastmod>${config.site.last_modified}</lastmod>
+    <lastmod>${entry.lastmod}</lastmod>
     <changefreq>${entry.changefreq}</changefreq>
     <priority>${entry.priority}</priority>
     <mobile:mobile type="pc,mobile"/>
@@ -665,13 +854,16 @@ ${entries.map((entry) => `  <url>
 }
 
 function writeOutput(file, content) {
-  fs.writeFileSync(path.join(root, file), `${content.trim().replace(/[ \t]+$/gm, '')}\n`, 'utf8');
+  const outputPath = path.join(root, file);
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+  fs.writeFileSync(outputPath, `${content.trim().replace(/[ \t]+$/gm, '')}\n`, 'utf8');
 }
 
 writeOutput('index.html', buildHomePage());
 config.pages.forEach((page) => writeOutput(page.file, buildContentPage(page)));
+articles.forEach((article) => writeOutput(article.file, buildArticlePage(article)));
 writeOutput('privacy.html', buildPrivacyPage());
 writeOutput('robots.txt', buildRobots());
 writeOutput('sitemap.xml', buildSitemap());
 
-console.log(`✅ 构建成功：生成首页、${config.pages.length} 个栏目页、隐私页、robots.txt 与 sitemap.xml`);
+console.log(`✅ 构建成功：生成首页、${config.pages.length} 个栏目页、${articles.length} 篇文章、隐私页、robots.txt 与 sitemap.xml`);
