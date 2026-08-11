@@ -153,7 +153,9 @@ jobs:
                 error_page 497 https://zonghuin.com$request_uri;
 
                 location = /index.html {
-                    return 301 https://zonghuin.com/;
+                    if ($request_uri ~ "^/index\.html(?:\?.*)?$") {
+                        return 301 https://zonghuin.com/;
+                    }
                 }
 
                 location / {
@@ -203,12 +205,14 @@ jobs:
                   http_headers="$(curl --noproxy '*' --silent --show-error --head --max-time 15 -H 'Host: zonghuin.com' http://127.0.0.1/)"
                   www_http_headers="$(curl --noproxy '*' --silent --show-error --head --max-time 15 -H 'Host: www.zonghuin.com' http://127.0.0.1/)"
                   www_https_headers="$(curl --noproxy '*' --silent --show-error --head --max-time 15 --resolve www.zonghuin.com:443:127.0.0.1 https://www.zonghuin.com/)"
+                  root_https_headers="$(curl --noproxy '*' --silent --show-error --head --max-time 15 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/)"
                   index_https_headers="$(curl --noproxy '*' --silent --show-error --head --max-time 15 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/index.html)"
                   if printf '%s\n' "$http_headers" | grep -Eq '^HTTP/[^ ]+ 301' \
                     && printf '%s\n' "$http_headers" | grep -Eiq '^Location: https://zonghuin\.com/' \
                     && printf '%s\n' "$www_http_headers" | grep -Eiq '^Location: https://zonghuin\.com/' \
                     && printf '%s\n' "$www_https_headers" | grep -Eq '^HTTP/[^ ]+ 301' \
                     && printf '%s\n' "$www_https_headers" | grep -Eiq '^Location: https://zonghuin\.com/' \
+                    && printf '%s\n' "$root_https_headers" | grep -Eq '^HTTP/[^ ]+ 200' \
                     && printf '%s\n' "$index_https_headers" | grep -Eq '^HTTP/[^ ]+ 301' \
                     && printf '%s\n' "$index_https_headers" | tr -d '\r' | grep -Eiq '^Location: https://zonghuin\.com/$' \
                     && curl --noproxy '*' --silent --show-error --fail --max-time 20 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/ -o /dev/null; then
