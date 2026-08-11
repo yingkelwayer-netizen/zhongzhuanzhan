@@ -1,0 +1,52 @@
+name: Emergency restore zonghuin.com Nginx
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore the last known-good Nginx configuration
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          script: |
+            set -eu
+            nginx_bin="/www/server/nginx/sbin/nginx"
+            site_conf="/www/server/panel/vhost/nginx/zonghuin.com.conf"
+            known_good="/www/server/panel/vhost/nginx/zonghuin.com.conf.codex-backup-20260811T031924Z"
+            emergency_copy="${site_conf}.redirect-loop-$(date -u +%Y%m%dT%H%M%SZ)"
+
+            test -x "$nginx_bin"
+            test -f "$site_conf"
+            test -f "$known_good"
+            cp -p "$site_conf" "$emergency_copy"
+            cp -p "$known_good" "$site_conf"
+
+            if ! "$nginx_bin" -t; then
+              cp -p "$emergency_copy" "$site_conf"
+              "$nginx_bin" -t
+              exit 1
+            fi
+
+            "$nginx_bin" -s reload
+
+            for attempt in 1 2 3 4 5 6 7 8 9 10; do
+              status="$(curl --noproxy '*' --silent --show-error --output /dev/null --write-out '%{http_code}' --max-time 15 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/)"
+              if [ "$status" = "200" ]; then
+                echo "Known-good Nginx configuration restored; homepage returns 200"
+                exit 0
+              fi
+              echo "Waiting for restored Nginx workers (attempt $attempt/10, status $status)"
+              sleep 1
+            done
+
+            echo "Restored configuration did not return homepage 200"
+            exit 1
