@@ -15,7 +15,7 @@ assert.match(workflow, /return 301 https:\/\/zonghuin\.com\$request_uri;/, 'HTTP
 assert.match(workflow, /server_name www\.zonghuin\.com;[\s\S]*?return 301 https:\/\/zonghuin\.com\$request_uri;/, 'HTTPS www must redirect to the root domain');
 assert.match(workflow, /location = \/index\.html \{\s*return 301 https:\/\/zonghuin\.com\/;\s*\}/, 'The duplicate /index.html URL must redirect to the canonical homepage');
 assert(workflow.includes('index_https_headers='), 'Runtime verification must request /index.html');
-assert(workflow.includes('^Location: https://zonghuin\\.com/\\r?$'), 'Runtime verification must check the exact /index.html canonical redirect with HTTP CRLF line endings');
+assert(workflow.includes("tr -d '\\r' | grep -Eiq '^Location: https://zonghuin\\.com/$'"), 'Runtime verification must normalize HTTP CRLF line endings before checking the exact /index.html redirect');
 assert.match(workflow, /Strict-Transport-Security/, 'The canonical HTTPS host must send HSTS');
 assert.match(workflow, /cert_public_key.*key_public_key/s, 'The workflow must verify that certificate and private key match');
 assert.match(workflow, /backup_conf.*restore_previous_config/s, 'The workflow must back up and roll back an invalid Nginx change');
