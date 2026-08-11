@@ -210,7 +210,7 @@ jobs:
                     && printf '%s\n' "$www_https_headers" | grep -Eq '^HTTP/[^ ]+ 301' \
                     && printf '%s\n' "$www_https_headers" | grep -Eiq '^Location: https://zonghuin\.com/' \
                     && printf '%s\n' "$index_https_headers" | grep -Eq '^HTTP/[^ ]+ 301' \
-                    && printf '%s\n' "$index_https_headers" | grep -Eiq '^Location: https://zonghuin\.com/$' \
+                    && printf '%s\n' "$index_https_headers" | grep -Eiq '^Location: https://zonghuin\.com/\r?$' \
                     && curl --noproxy '*' --silent --show-error --fail --max-time 20 --resolve zonghuin.com:443:127.0.0.1 https://zonghuin.com/ -o /dev/null; then
                     return 0
                   fi
