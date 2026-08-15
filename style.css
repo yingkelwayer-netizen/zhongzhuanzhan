@@ -835,6 +835,10 @@ body {
   line-height: 1.9;
 }
 
+.content-credential {
+  margin-top: 14px;
+}
+
 .content-portrait {
   margin: 34px 0 0;
   overflow: hidden;
