@@ -94,8 +94,23 @@ const websiteEntity = {
 
 function structuredDataForPage({ file, title, description, navName }) {
   const url = pageUrl(file);
-  const graph = [websiteEntity, personEntity];
   const pageConfig = config.pages.find((page) => page.file === file);
+  const pagePersonEntity = file === 'about.html'
+    ? {
+        ...personEntity,
+        description: pageConfig?.person_description || personEntity.description,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: '北京市',
+          addressCountry: 'CN'
+        },
+        worksFor: {
+          ...personEntity.worksFor,
+          url: config.profile.firm_url
+        }
+      }
+    : personEntity;
+  const graph = [websiteEntity, pagePersonEntity];
 
   const webpage = {
     '@type': file === 'about.html' ? 'ProfilePage' : 'WebPage',
@@ -115,6 +130,7 @@ function structuredDataForPage({ file, title, description, navName }) {
     dateModified: pageConfig?.last_modified || config.site.last_modified
   };
 
+  if (pageConfig?.date_published) webpage.datePublished = pageConfig.date_published;
   if (pageConfig?.search_terms?.length) webpage.keywords = pageConfig.search_terms.join(', ');
   if (file === 'about.html') webpage.mainEntity = { '@id': `${config.site.url}/#person` };
   graph.push(webpage);
@@ -632,9 +648,9 @@ function renderContentLinks(links = []) {
   }).join('')}</div>`;
 }
 
-function renderContentSection(section) {
+function renderContentSection(section, className = '') {
   return `
-        <section class="content-section">
+        <section class="content-section${className}">
           <h2>${escapeHtml(section.heading)}</h2>
           ${(section.paragraphs || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('')}
           ${(section.bullets || []).length ? `<ul>${section.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}</ul>` : ''}
@@ -642,22 +658,45 @@ function renderContentSection(section) {
         </section>`;
 }
 
+function renderAboutProfile(page) {
+  return `<header class="about-profile-hero">
+        <div class="about-profile-copy">
+          <p class="about-profile-kicker">${escapeHtml(page.eyebrow)}</p>
+          <h1>${escapeHtml(page.heading)}</h1>
+          <p class="about-profile-role">${escapeHtml(config.profile.role_line)}</p>
+        </div>
+        <figure class="about-portrait-stage">
+          ${renderPicture({ className: 'about-portrait-image', alt: config.profile.image_alt, eager: true })}
+          <figcaption>${escapeHtml(config.profile.full_name)} · ${escapeHtml(config.profile.firm)}</figcaption>
+        </figure>
+      </header>
+      <section class="about-intro" aria-label="执业简介">
+        <p class="about-license">执业证号：<a href="${escapeHtml(config.profile.license_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(config.profile.license_number)}</a></p>
+        <p class="about-lead">${escapeHtml(page.lead)}</p>
+      </section>`;
+}
+
 function buildContentPage(page) {
   const file = page.file;
+  const isAbout = file === 'about.html';
   const isContact = file === 'contact.html';
-  const aboutImage = file === 'about.html' ? `
-        <figure class="content-portrait">
-          ${renderPicture({ className: 'content-portrait-image', alt: config.profile.image_alt })}
-          <figcaption>${escapeHtml(config.profile.name)} · ${escapeHtml(config.profile.firm)}</figcaption>
-        </figure>` : '';
+  const pageIntro = isAbout ? renderAboutProfile(page) : `<header class="content-hero">
+        <p class="content-eyebrow">${escapeHtml(page.eyebrow)}</p>
+        <h1>${escapeHtml(page.heading)}</h1>
+        <p class="content-lead">${escapeHtml(page.lead)}</p>
+      </header>
+      `;
   const ctaHref = isContact ? './' : './contact.html';
   const ctaLabel = isContact ? '返回首页' : '联系牛宗汇律师';
+  const bodyClass = isAbout ? 'content-body about-body' : 'content-body';
+  const mainClass = isAbout ? 'content-main about-main' : 'content-main';
+  const disclaimer = page.disclaimer || config.profile.disclaimer;
 
   return `<!DOCTYPE html>
 <html lang="zh-CN">
-<head>${renderHead({ file, title: page.title, description: page.description, navName: page.nav_name })}
+<head>${renderHead({ file, title: page.title, description: page.description, navName: page.nav_name, preloadHero: isAbout })}
 </head>
-<body class="content-body">
+<body class="${bodyClass}">
   <div class="ambient-backdrop" aria-hidden="true"></div>
   <div class="content-shell">
     <header class="content-topbar">
@@ -669,23 +708,18 @@ function buildContentPage(page) {
     </header>
     ${renderSiteNav(file)}
 
-    <main class="content-main">
+    <main class="${mainClass}">
       <nav class="breadcrumb" aria-label="面包屑导航">
         <a href="./">首页</a><span aria-hidden="true">/</span><span aria-current="page">${escapeHtml(page.nav_name)}</span>
       </nav>
-      <header class="content-hero">
-        <p class="content-eyebrow">${escapeHtml(page.eyebrow)}</p>
-        <h1>${escapeHtml(page.heading)}</h1>
-        <p class="content-lead">${escapeHtml(page.lead)}</p>
-      </header>
-      ${aboutImage}
-      ${page.sections.map(renderContentSection).join('')}
+      ${pageIntro}
+      ${page.sections.map((section) => renderContentSection(section, isAbout ? ' about-section' : '')).join('')}
 
-      <aside class="legal-note">
+      <aside class="legal-note${isAbout ? ' about-legal-note' : ''}">
         <strong>重要说明</strong>
-        <p>${escapeHtml(config.profile.disclaimer)}</p>
+        <p>${escapeHtml(disclaimer)}</p>
       </aside>
-      <a class="content-cta" href="${ctaHref}">${ctaLabel}<span aria-hidden="true">${icons.arrow}</span></a>
+      <a class="content-cta${isAbout ? ' about-cta' : ''}" href="${ctaHref}">${ctaLabel}<span aria-hidden="true">${icons.arrow}</span></a>
     </main>
     ${renderFooter()}
   </div>
@@ -735,7 +769,7 @@ function buildArticlePage(article) {
           <li>适用范围：${escapeHtml(article.scope)}</li>
         </ul>
       </section>
-      ${article.sections.map(renderContentSection).join('')}
+      ${article.sections.map((section) => renderContentSection(section)).join('')}
 
       <section class="content-section">
         <h2>现行官方法源</h2>
@@ -816,7 +850,7 @@ function buildPrivacyPage() {
         <h1>隐私权政策</h1>
         <p class="content-lead">最近更新：2026年8月8日</p>
       </header>
-      ${privacySections.map(renderContentSection).join('')}
+      ${privacySections.map((section) => renderContentSection(section)).join('')}
     </main>
     ${renderFooter()}
   </div>
